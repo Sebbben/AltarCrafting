@@ -1,8 +1,0 @@
-name: templatePlugin
-version: 1.0
-api-version: 1.16
-main: me.Sebbben.TemplatePlugin.Main
-commands:
-  test:
-    description: none
-    usage: /<command>
