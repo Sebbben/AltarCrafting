@@ -1,8 +1,12 @@
-name: templatePlugin
+name: AltarCrafting
 version: 1.0
-api-version: 1.16
-main: me.Sebbben.TemplatePlugin.Main
+api-version: 1.19
+main: me.Sebbben.AltarCrafting.Main
 commands:
-  test:
-    description: none
-    usage: /<command>
+  altarCrafting:
+    description: Main command for the altarcrafting plugin
+    usage: /<command> args
+    aliases:
+      - ac
+      - alCr
+      - altarCraft
