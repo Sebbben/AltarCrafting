@@ -2,13 +2,12 @@ package me.Sebbben.AltarCrafting.Listeners;
 
 import me.Sebbben.AltarCrafting.CustomItems;
 import me.Sebbben.AltarCrafting.ParticleSpawner;
-import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class CornerSelectListener implements Listener {
@@ -20,28 +19,26 @@ public class CornerSelectListener implements Listener {
 
     @EventHandler
     public void onSelectCorner(PlayerInteractEvent e) {
-        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (e.getHand() == EquipmentSlot.OFF_HAND || e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         ItemStack mainHand = e.getPlayer().getInventory().getItemInMainHand();
 
-        if (ps == null) ps = new ParticleSpawner(e.getPlayer().getWorld(), e.getPlayer());
+        if (ps == null) ps = new ParticleSpawner(e.getPlayer().getWorld());
 
-        if (mainHand.isSimilar(CustomItems.getCorner1Select())) {
-            corner1 = e.getClickedBlock().getLocation();
+        e.getPlayer().sendMessage(String.valueOf(e.getHand()));
 
-        } else if (mainHand.isSimilar(CustomItems.getCorner2Select())) {
-            corner2 = e.getClickedBlock().getLocation();
-            if (corner1 != null) {
-                e.getPlayer().sendMessage("spawing particles");
+        if (mainHand.isSimilar(CustomItems.getCornerSelectTool())) {
+            if (corner1 == null) {
+                corner1 = e.getClickedBlock().getLocation();
+                ps.spawnParticleBox(corner1, corner1);
+                e.getPlayer().sendMessage("Corner 1 selected");
+            } else {
+                corner2 = e.getClickedBlock().getLocation();
                 ps.spawnParticleBox(corner1, corner2);
+                e.getPlayer().sendMessage("Corner 2 selected");
                 corner1 = null;
                 corner2 = null;
             }
         }
-
-
-
-
-
     }
 }

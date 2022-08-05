@@ -41,8 +41,7 @@ public class altarCommand implements CommandExecutor {
             inv.setItem(i, null);
         }
 
-        inv.setItem(3, CustomItems.getCorner1Select());
-        inv.setItem(5, CustomItems.getCorner2Select());
+        inv.setItem(4, CustomItems.getCornerSelectTool());
 
     }
 

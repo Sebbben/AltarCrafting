@@ -9,11 +9,9 @@ public class ParticleSpawner {
 
     private final int particlesPerBlock = 5;
     private final World world;
-    private final Player player;
 
-    public ParticleSpawner(World _world, Player _player) {
+    public ParticleSpawner(World _world) {
         world = _world;
-        player = _player;
     }
 
 
@@ -59,11 +57,6 @@ public class ParticleSpawner {
         double xDiff = l2.getX() - l1.getX();
         double yDiff = l2.getY() - l1.getY();
         double zDiff = l2.getZ() - l1.getZ();
-
-        player.sendMessage(String.valueOf(xDiff));
-        player.sendMessage(String.valueOf(yDiff));
-        player.sendMessage(String.valueOf(zDiff));
-
 
         int numberOfParticles = (int) Math.floor(Math.max(Math.abs(xDiff),Math.max(Math.abs(yDiff),Math.abs(zDiff))) * particlesPerBlock);
 
