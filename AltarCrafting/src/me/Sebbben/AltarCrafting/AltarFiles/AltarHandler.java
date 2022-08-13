@@ -1,21 +1,20 @@
 package me.Sebbben.AltarCrafting.AltarFiles;
 
 import me.Sebbben.AltarCrafting.AreaSelect;
+import me.Sebbben.AltarCrafting.Listeners.CornerSelectListener;
+import me.Sebbben.AltarCrafting.Main;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 public class AltarHandler {
-
-    private static HashMap<String, Altar> altars = new HashMap<>();
-
+    private static final HashMap<String, Altar> altars = new HashMap<>();
+    private static final CornerSelectListener cornerSelectListener = new CornerSelectListener();
     private static Altar currentAltar;
 
     public static void saveAltars() {
@@ -35,6 +34,7 @@ public class AltarHandler {
 
     public static void newAltar(String name) {
         currentAltar = new Altar(name);
+        Main.getInstance().getServer().getPluginManager().registerEvents(cornerSelectListener,Main.getInstance());
     }
     public static void setAltarArea(AreaSelect altarArea, Player player) {
 
@@ -59,6 +59,7 @@ public class AltarHandler {
 
         // Set all blocks position relative to cauldron
         for (Block block : blocks) {
+            if (block.getType() == Material.AIR) continue;
             Vector<Integer> coords = new Vector<>();
             Location relativePos = block.getLocation().clone().subtract(cauldronLocation);
             coords.add(relativePos.getBlockX());
@@ -73,9 +74,20 @@ public class AltarHandler {
 
     public static void finishAltar() {
         altars.put(currentAltar.getName(), currentAltar);
-        System.out.println("New altar added: " + currentAltar.getName());
-        System.out.println("Size: " + currentAltar.getSize());
         saveAltars();
         currentAltar = null;
+        PlayerInteractEvent.getHandlerList().unregister(cornerSelectListener);
+    }
+
+    public static Set<String> getAltarNames() {return altars.keySet();}
+
+    public static void cancelAltar() {
+        currentAltar = null;
+    }
+
+    public static void removeAltar(String altarName) {
+        altars.remove(altarName);
+        AltarsConfig.get().set(altarName, null);
+        AltarsConfig.save();
     }
 }

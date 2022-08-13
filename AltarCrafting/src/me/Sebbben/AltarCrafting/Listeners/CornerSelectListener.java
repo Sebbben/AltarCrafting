@@ -29,7 +29,6 @@ public class CornerSelectListener implements Listener {
                 } else {
                     altarArea.setCorner2(e.getClickedBlock().getLocation());
                     e.getPlayer().sendMessage("Corner 2 selected");
-                    AltarHandler.setAltarArea(altarArea, e.getPlayer());
                 }
             }
         }
@@ -37,13 +36,24 @@ public class CornerSelectListener implements Listener {
             if (altarArea.hasTwoPositions()) {
                 e.getPlayer().sendMessage("Finished new Altar!");
                 altarArea.showArea();
+                AltarHandler.setAltarArea(altarArea, e.getPlayer());
                 AltarHandler.finishAltar();
                 altarArea = null;
+
                 Inventory inv = e.getPlayer().getInventory();
 
                 for (int i=0;i<9;i++) {
                     inv.setItem(i, null);
                 }
+            }
+        }
+        if (mainHand.isSimilar(CustomItems.getCancelItem())) {
+            e.getPlayer().sendMessage("Altar creation canceled!");
+            AltarHandler.cancelAltar();
+            altarArea = null;
+            Inventory inv = e.getPlayer().getInventory();
+            for (int i=0;i<9;i++) {
+                inv.setItem(i, null);
             }
         }
     }
