@@ -11,7 +11,7 @@ import java.util.List;
 public class altarCraftingTabComplete implements TabCompleter {
 
     List<String> altarCommands = Arrays.asList(
-            "newAltar",
+            "createAltar",
             ""
     );
 

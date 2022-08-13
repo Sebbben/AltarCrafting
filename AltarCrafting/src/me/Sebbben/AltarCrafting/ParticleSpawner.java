@@ -3,7 +3,6 @@ package me.Sebbben.AltarCrafting;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class ParticleSpawner {
 
