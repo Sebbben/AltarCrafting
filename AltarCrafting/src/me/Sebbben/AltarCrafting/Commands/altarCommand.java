@@ -26,11 +26,21 @@ public class altarCommand implements CommandExecutor {
             case "removeAltar":
                 removeAltarCommand(player, args);
                 break;
+
+
+
+
+            case "addRecipe":
+                addRecipeCommand(player, args);
             default:
                 return false;
         }
 
         return true;
+    }
+
+    private void addRecipeCommand(Player player, String[] args) {
+        
     }
 
     private void removeAltarCommand(Player player, String[] args) {

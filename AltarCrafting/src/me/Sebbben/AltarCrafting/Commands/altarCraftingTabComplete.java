@@ -26,10 +26,19 @@ public class altarCraftingTabComplete implements TabCompleter {
                 if (str.startsWith(args[0]))
                     options.add(str);
         } else if (args.length == 2) {
-            if (Objects.equals(args[0], "removeAltar")) {
-                for (String str : AltarHandler.getAltarNames())
-                    if (str.startsWith(args[1]))
-                        options.add(str);
+            switch (args[0]) {
+                case "removeAltar":
+                    for (String str : AltarHandler.getAltarNames())
+                        if (str.startsWith(args[1]))
+                            options.add(str);
+                    break;
+                case "createAltar":
+                    if (Objects.equals(args[1], ""))
+                        options.add("Altar Name");
+                    break;
+                default:
+                    break;
+
             }
         }
 
