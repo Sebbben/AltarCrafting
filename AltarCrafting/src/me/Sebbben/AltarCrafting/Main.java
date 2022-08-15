@@ -1,10 +1,12 @@
 package me.Sebbben.AltarCrafting;
 
 import me.Sebbben.AltarCrafting.AltarFiles.AltarHandler;
-import me.Sebbben.AltarCrafting.AltarFiles.AltarsConfig;
+import me.Sebbben.AltarCrafting.CustomConfigs.AltarsConfig;
 import me.Sebbben.AltarCrafting.Commands.altarCommandManager;
 import me.Sebbben.AltarCrafting.Listeners.PreventUsageOfCustomItems;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Level;
 
 public class Main extends JavaPlugin {
 
@@ -41,6 +43,8 @@ public class Main extends JavaPlugin {
         AltarHandler.saveAltars();
     }
 
-
+    public void log(Level level, String s) {
+        getLogger().log(level, s);
+    }
 
 }

@@ -1,7 +1,7 @@
 package me.Sebbben.AltarCrafting.Commands.SubCommands;
 
 import me.Sebbben.AltarCrafting.AltarFiles.AltarHandler;
-import me.Sebbben.AltarCrafting.CustomItems;
+import me.Sebbben.AltarCrafting.Files.CustomItems;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -40,7 +40,12 @@ public class createAltarCommand extends Subcommand{
 
         inv.setItem(2, CustomItems.getCancelItem());
         inv.setItem(4, CustomItems.getCornerSelectTool());
-        inv.setItem(6, CustomItems.getFinishSelectItem());
+        inv.setItem(6, CustomItems.getFinishItem());
 
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ac " + getName() + " <Altar name>";
     }
 }

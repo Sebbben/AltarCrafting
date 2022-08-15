@@ -23,4 +23,9 @@ public class removeAltarCommand extends Subcommand{
             player.sendMessage(args[1] + " was removed");
         }
     }
+
+    @Override
+    public String getUsage() {
+        return "/ac " + getName() + " <AltarName>";
+    }
 }

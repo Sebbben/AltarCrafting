@@ -24,4 +24,9 @@ public class listAltarsCommand extends Subcommand{
             player.sendMessage(name);
         }
     }
+
+    @Override
+    public String getUsage() {
+        return "/ac " + getName();
+    }
 }

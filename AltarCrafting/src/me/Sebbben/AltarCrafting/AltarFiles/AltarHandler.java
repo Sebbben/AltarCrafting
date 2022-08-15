@@ -1,6 +1,7 @@
 package me.Sebbben.AltarCrafting.AltarFiles;
 
-import me.Sebbben.AltarCrafting.AreaSelect;
+import me.Sebbben.AltarCrafting.Files.AreaSelect;
+import me.Sebbben.AltarCrafting.CustomConfigs.AltarsConfig;
 import me.Sebbben.AltarCrafting.Listeners.CornerSelectListener;
 import me.Sebbben.AltarCrafting.Main;
 import org.bukkit.Location;
@@ -16,6 +17,7 @@ public class AltarHandler {
     private static final HashMap<String, Altar> altars = new HashMap<>();
     private static final CornerSelectListener cornerSelectListener = new CornerSelectListener();
     private static Altar currentAltar;
+    private static AreaSelect altarArea;
 
     public static void saveAltars() {
         FileConfiguration config = AltarsConfig.get();
@@ -28,15 +30,32 @@ public class AltarHandler {
         AltarsConfig.save();
     }
     public static void loadAltars() {
-        Object rawAltars = AltarsConfig.get().getKeys(false);
-        System.out.println(rawAltars);
+        Set<String> rawAltars = AltarsConfig.get().getKeys(false);
+        for (String key : rawAltars) {
+            Altar altar = new Altar(key);
+
+            HashMap<Vector<Integer>, Material> altarBlocks = new HashMap<>();
+
+            Set<String> altarPositions = AltarsConfig.get().getConfigurationSection(key).getKeys(false);
+            for (String position : altarPositions) {
+                Vector<Integer> pos = new Vector<>();
+                String newPosition = position.substring(1,position.length()-1);
+                for (String s : newPosition.split(", ")) {
+                    pos.add(Integer.decode(s));
+                }
+                Material mat = Material.matchMaterial(AltarsConfig.get().getString(key + "." + position));
+                altarBlocks.put(pos, mat);
+            }
+            altar.setRelativePositions(altarBlocks);
+            altars.put(key, altar);
+        }
     }
 
     public static void newAltar(String name) {
         currentAltar = new Altar(name);
         Main.getInstance().getServer().getPluginManager().registerEvents(cornerSelectListener,Main.getInstance());
     }
-    public static void setAltarArea(AreaSelect altarArea, Player player) {
+    public static void makeRelativeCoords() {
 
         List<Block> blocks = altarArea.getBlocks();
 
@@ -51,7 +70,6 @@ public class AltarHandler {
         }
 
         if (cauldronLocation == null) {
-            player.sendMessage("Could not find water cauldron in altar. Try placing a water cauldron or filling the cauldron with water");
             return;
         }
 
@@ -73,6 +91,9 @@ public class AltarHandler {
     }
 
     public static void finishAltar() {
+        makeRelativeCoords();
+        altarArea.showArea();
+        altarArea = null;
         altars.put(currentAltar.getName(), currentAltar);
         saveAltars();
         currentAltar = null;
@@ -89,5 +110,24 @@ public class AltarHandler {
         altars.remove(altarName);
         AltarsConfig.get().set(altarName, null);
         AltarsConfig.save();
+    }
+
+    public static boolean isCreatingAltar() {
+        return currentAltar != null;
+    }
+
+    public static void setCorner(Location corner, Player player) {
+        if (altarArea == null) {
+            altarArea = new AreaSelect(player.getWorld());
+            altarArea.setCorner1(corner);
+            player.sendMessage("Corner 1 selected");
+        } else {
+            altarArea.setCorner2(corner);
+            player.sendMessage("Corner 2 selected");
+        }
+    }
+
+    public static boolean hasTwoCorners() {
+        return altarArea.hasTwoPositions();
     }
 }

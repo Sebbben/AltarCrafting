@@ -1,6 +1,6 @@
 package me.Sebbben.AltarCrafting.Listeners;
 
-import me.Sebbben.AltarCrafting.CustomItems;
+import me.Sebbben.AltarCrafting.Files.CustomItems;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;

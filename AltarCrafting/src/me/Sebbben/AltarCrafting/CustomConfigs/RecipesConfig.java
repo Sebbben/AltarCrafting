@@ -1,4 +1,4 @@
-package me.Sebbben.AltarCrafting.AltarFiles;
+package me.Sebbben.AltarCrafting.CustomConfigs;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -7,14 +7,14 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.IOException;
 
-public class AltarsConfig {
+public class RecipesConfig {
 
     private static File file;
     private static FileConfiguration customFile;
 
     //Finds or generates the custom config file
     public static void setup(Plugin plugin){
-        file = new File(plugin.getDataFolder(), "altars.yml");
+        file = new File(plugin.getDataFolder(), "recipes.yml");
 
         if (!file.exists()){
             try{

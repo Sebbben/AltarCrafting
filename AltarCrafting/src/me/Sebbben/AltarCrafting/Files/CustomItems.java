@@ -1,4 +1,4 @@
-package me.Sebbben.AltarCrafting;
+package me.Sebbben.AltarCrafting.Files;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,8 +11,10 @@ import java.util.List;
 public class CustomItems {
 
     private static ItemStack cornerSelectTool;
-    private static ItemStack finishSelectItem;
+    private static ItemStack finishItem;
     private static ItemStack cancelItem;
+    private static ItemStack materialsItem;
+    private static ItemStack resultItem;
 
     private static List<ItemStack> customItems = new ArrayList<>();
     public static ItemStack[] getAllItems() {
@@ -34,17 +36,17 @@ public class CustomItems {
         return cornerSelectTool;
     }
     
-    public static ItemStack getFinishSelectItem() {
-        if (finishSelectItem != null) return finishSelectItem;
+    public static ItemStack getFinishItem() {
+        if (finishItem != null) return finishItem;
 
-        finishSelectItem = new ItemStack(Material.EMERALD,1);
-        ItemMeta finishSelectMeta = finishSelectItem.getItemMeta();
-        finishSelectMeta.setDisplayName(ChatColor.GREEN + "Finish select");
-        finishSelectMeta.setUnbreakable(true);
-        finishSelectItem.setItemMeta(finishSelectMeta);
+        finishItem = new ItemStack(Material.EMERALD,1);
+        ItemMeta finishItemMeta = finishItem.getItemMeta();
+        finishItemMeta.setDisplayName(ChatColor.GREEN + "Finish");
+        finishItemMeta.setUnbreakable(true);
+        finishItem.setItemMeta(finishItemMeta);
 
-        customItems.add(finishSelectItem);
-        return finishSelectItem;
+        customItems.add(finishItem);
+        return finishItem;
     }
 
     public static ItemStack getCancelItem() {
@@ -58,6 +60,32 @@ public class CustomItems {
 
         customItems.add(cancelItem);
         return cancelItem;
+    }
+
+    public static ItemStack getMaterialsItem() {
+        if (materialsItem != null) return materialsItem;
+
+        materialsItem = new ItemStack(Material.HOPPER,1);
+        ItemMeta materialsItemMeta = materialsItem.getItemMeta();
+        materialsItemMeta.setDisplayName(ChatColor.GOLD + "Materials");
+        materialsItemMeta.setUnbreakable(true);
+        materialsItem.setItemMeta(materialsItemMeta);
+
+        customItems.add(materialsItem);
+        return materialsItem;
+    }
+
+    public static ItemStack getResultItem() {
+        if (resultItem != null) return resultItem;
+
+        resultItem = new ItemStack(Material.DROPPER,1);
+        ItemMeta resultItemMeta = resultItem.getItemMeta();
+        resultItemMeta.setDisplayName(ChatColor.GOLD + "Result");
+        resultItemMeta.setUnbreakable(true);
+        resultItem.setItemMeta(resultItemMeta);
+
+        customItems.add(resultItem);
+        return resultItem;
     }
 
 }

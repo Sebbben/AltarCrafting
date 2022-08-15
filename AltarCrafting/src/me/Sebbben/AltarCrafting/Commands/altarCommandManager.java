@@ -1,11 +1,7 @@
 package me.Sebbben.AltarCrafting.Commands;
 
-import me.Sebbben.AltarCrafting.Commands.SubCommands.Subcommand;
-import me.Sebbben.AltarCrafting.Commands.SubCommands.createAltarCommand;
-import me.Sebbben.AltarCrafting.Commands.SubCommands.listAltarsCommand;
-import me.Sebbben.AltarCrafting.Commands.SubCommands.removeAltarCommand;
+import me.Sebbben.AltarCrafting.Commands.SubCommands.*;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
@@ -21,6 +17,7 @@ public class altarCommandManager implements TabExecutor {
         subcommands.add(new createAltarCommand());
         subcommands.add(new listAltarsCommand());
         subcommands.add(new removeAltarCommand());
+        subcommands.add(new addRecipeCommand());
     }
 
     @Override

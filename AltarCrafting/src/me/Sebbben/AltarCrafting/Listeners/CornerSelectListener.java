@@ -1,8 +1,8 @@
 package me.Sebbben.AltarCrafting.Listeners;
 
 import me.Sebbben.AltarCrafting.AltarFiles.AltarHandler;
-import me.Sebbben.AltarCrafting.AreaSelect;
-import me.Sebbben.AltarCrafting.CustomItems;
+import me.Sebbben.AltarCrafting.Files.CustomItems;
+import me.Sebbben.AltarCrafting.RecipeFiles.RecipeHandler;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -13,48 +13,40 @@ import org.bukkit.inventory.ItemStack;
 
 public class CornerSelectListener implements Listener {
 
-    private AreaSelect altarArea;
-
     @EventHandler
     public void onSelectCorner(PlayerInteractEvent e) {
         if (e.getHand() == EquipmentSlot.OFF_HAND) return;
 
         ItemStack mainHand = e.getPlayer().getInventory().getItemInMainHand();
+        // ----- RIGHT CLICK BLOCK -------
         if  (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (mainHand.isSimilar(CustomItems.getCornerSelectTool())) {
-                if (altarArea == null) {
-                    altarArea = new AreaSelect(e.getPlayer().getWorld());
-                    altarArea.setCorner1(e.getClickedBlock().getLocation());
-                    e.getPlayer().sendMessage("Corner 1 selected");
-                } else {
-                    altarArea.setCorner2(e.getClickedBlock().getLocation());
-                    e.getPlayer().sendMessage("Corner 2 selected");
-                }
+                AltarHandler.setCorner(e.getClickedBlock().getLocation(), e.getPlayer());
             }
         }
-        if (mainHand.isSimilar(CustomItems.getFinishSelectItem())) {
-            if (altarArea.hasTwoPositions()) {
-                e.getPlayer().sendMessage("Finished new Altar!");
-                altarArea.showArea();
-                AltarHandler.setAltarArea(altarArea, e.getPlayer());
-                AltarHandler.finishAltar();
-                altarArea = null;
 
-                Inventory inv = e.getPlayer().getInventory();
-
-                for (int i=0;i<9;i++) {
-                    inv.setItem(i, null);
+        // ----- THE REST -------
+        if (mainHand.isSimilar(CustomItems.getFinishItem())) {
+            if (AltarHandler.isCreatingAltar()) {
+                if (AltarHandler.hasTwoCorners()){
+                    e.getPlayer().sendMessage("Finished new Altar!");
+                    AltarHandler.finishAltar();
+                }
+            } else if (RecipeHandler.isCreatingRecipe()) {
+                if (RecipeHandler.recipeIsComplete()) {
+                    e.getPlayer().sendMessage("Recipe finished and added!");
+                    RecipeHandler.finishRecipe();
                 }
             }
-        }
-        if (mainHand.isSimilar(CustomItems.getCancelItem())) {
-            e.getPlayer().sendMessage("Altar creation canceled!");
-            AltarHandler.cancelAltar();
-            altarArea = null;
+
+
             Inventory inv = e.getPlayer().getInventory();
+
             for (int i=0;i<9;i++) {
                 inv.setItem(i, null);
             }
+
         }
+
     }
 }

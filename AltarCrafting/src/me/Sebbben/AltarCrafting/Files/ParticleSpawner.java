@@ -1,4 +1,4 @@
-package me.Sebbben.AltarCrafting;
+package me.Sebbben.AltarCrafting.Files;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;
