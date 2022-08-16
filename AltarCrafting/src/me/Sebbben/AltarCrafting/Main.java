@@ -1,6 +1,5 @@
 package me.Sebbben.AltarCrafting;
 
-import me.Sebbben.AltarCrafting.AltarFiles.AltarHandler;
 import me.Sebbben.AltarCrafting.CustomConfigs.AltarsConfig;
 import me.Sebbben.AltarCrafting.Commands.altarCommandManager;
 import me.Sebbben.AltarCrafting.Listeners.PreventUsageOfCustomItems;
@@ -11,6 +10,7 @@ import java.util.logging.Level;
 public class Main extends JavaPlugin {
 
     private static Main instance;
+    private AltarHandler altarHandler;
 
     public static Main getInstance() {
         return instance;
@@ -20,27 +20,28 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        this.getCommand("altarCrafting").setExecutor(new altarCommandManager());
-        this.getCommand("altarCrafting").setTabCompleter(new altarCommandManager());
         this.getServer().getPluginManager().registerEvents(new PreventUsageOfCustomItems(),this);
 
         // Setup configs
         saveDefaultConfig();
 
-
-
         AltarsConfig.setup(this);
         AltarsConfig.get().options().copyDefaults(true);
         AltarsConfig.save();
 
+        altarHandler = new AltarHandler(this);
+        altarHandler.loadAltars();
 
-        AltarHandler.loadAltars();
+        altarCommandManager manager = new altarCommandManager(altarHandler);
+
+        this.getCommand("altarCrafting").setExecutor(manager);
+        this.getCommand("altarCrafting").setTabCompleter(manager);
 
     }
 
     @Override
     public void onDisable() {
-        AltarHandler.saveAltars();
+        altarHandler.saveAltars();
     }
 
     public void log(Level level, String s) {

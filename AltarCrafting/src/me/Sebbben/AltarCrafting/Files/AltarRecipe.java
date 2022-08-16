@@ -1,7 +1,7 @@
-package me.Sebbben.AltarCrafting.RecipeFiles;
+package me.Sebbben.AltarCrafting.Files;
 
-import me.Sebbben.AltarCrafting.AltarFiles.AltarHandler;
-import net.minecraft.world.item.ItemStack;
+
+import org.bukkit.inventory.ItemStack;
 
 public class AltarRecipe {
     private ItemStack[] materials;

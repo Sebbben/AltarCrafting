@@ -1,12 +1,18 @@
 package me.Sebbben.AltarCrafting.Commands.SubCommands;
 
-import me.Sebbben.AltarCrafting.AltarFiles.AltarHandler;
+import me.Sebbben.AltarCrafting.AltarHandler;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Set;
 
-public class listAltarsCommand extends Subcommand{
+public class listAltarsCommand extends Subcommand {
+
+
+    public listAltarsCommand(AltarHandler altarHandler) {
+        super(altarHandler);
+    }
+
     @Override
     public String getName() {
         return "listAltars";
@@ -19,7 +25,7 @@ public class listAltarsCommand extends Subcommand{
 
     @Override
     public void preform(Player player, String[] args) {
-        Set<String> names = AltarHandler.getAltarNames();
+        Set<String> names = altarHandler.getAltarNames();
         for (String name : names) {
             player.sendMessage(name);
         }

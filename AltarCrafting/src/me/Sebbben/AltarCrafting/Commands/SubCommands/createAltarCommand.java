@@ -1,6 +1,6 @@
 package me.Sebbben.AltarCrafting.Commands.SubCommands;
 
-import me.Sebbben.AltarCrafting.AltarFiles.AltarHandler;
+import me.Sebbben.AltarCrafting.AltarHandler;
 import me.Sebbben.AltarCrafting.Files.CustomItems;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -9,6 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class createAltarCommand extends Subcommand{
+
+    public createAltarCommand(AltarHandler altarHandler) {
+        super(altarHandler);
+    }
 
     @Override
     public String getName() {
@@ -22,13 +26,13 @@ public class createAltarCommand extends Subcommand{
 
     @Override
     public void preform(Player player, String[] args) {
-        if (AltarHandler.getAltarNames().contains(args[1])) {
+        if (altarHandler.getAltarNames().contains(args[1])) {
             player.sendMessage("There is already an altar with this name!");
             player.sendMessage("Use another name or remove the other altar");
             return;
         }
 
-        AltarHandler.newAltar(args[1]);
+        altarHandler.newAltar(args[1]);
 
         player.sendMessage("New Altar selection begun!");
 

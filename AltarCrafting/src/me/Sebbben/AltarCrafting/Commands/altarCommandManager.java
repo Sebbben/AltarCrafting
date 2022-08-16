@@ -1,5 +1,6 @@
 package me.Sebbben.AltarCrafting.Commands;
 
+import me.Sebbben.AltarCrafting.AltarHandler;
 import me.Sebbben.AltarCrafting.Commands.SubCommands.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,12 +13,17 @@ import java.util.List;
 public class altarCommandManager implements TabExecutor {
 
     private final List<Subcommand> subcommands = new ArrayList<>();
+    private AltarHandler altarHandler;
 
-    public altarCommandManager() {
-        subcommands.add(new createAltarCommand());
-        subcommands.add(new listAltarsCommand());
-        subcommands.add(new removeAltarCommand());
-        subcommands.add(new addRecipeCommand());
+    public altarCommandManager(AltarHandler altarHandler) {
+        this.altarHandler = altarHandler;
+
+
+        subcommands.add(new createAltarCommand(altarHandler));
+        subcommands.add(new listAltarsCommand(altarHandler));
+        subcommands.add(new removeAltarCommand(altarHandler));
+        subcommands.add(new addRecipeCommand(altarHandler));
+        subcommands.add(new listRecipesCommand(altarHandler));
     }
 
     @Override

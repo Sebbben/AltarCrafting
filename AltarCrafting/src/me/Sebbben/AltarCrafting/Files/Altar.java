@@ -1,4 +1,4 @@
-package me.Sebbben.AltarCrafting.AltarFiles;
+package me.Sebbben.AltarCrafting.Files;
 
 import org.bukkit.Material;
 
