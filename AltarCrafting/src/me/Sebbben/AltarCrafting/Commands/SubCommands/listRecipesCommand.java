@@ -32,7 +32,13 @@ public class listRecipesCommand extends Subcommand{
             return;
         }
 
+
         List<AltarRecipe> recipes = altarHandler.getRecipesFor(args[1]);
+        if (recipes == null) {
+            player.sendMessage("This altar does not have any recipes!");
+            player.sendMessage("Add some by using /ac addRecipe <Altar Name>");
+            return;
+        }
         for (AltarRecipe recipe : recipes) {
             List<String> mats = new ArrayList<>();
             for (ItemStack mat : recipe.getMaterials()) {

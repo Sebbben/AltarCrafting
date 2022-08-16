@@ -63,6 +63,7 @@ public class AltarHandler {
     public void addAltar(String name, Altar altar) {altars.put(name, altar);}
 
     public void finishAction(Player player) {
+        if (currentAction == null) return;
         currentAction.finish(player);
         currentAction = null;
     }
@@ -70,6 +71,7 @@ public class AltarHandler {
     public Set<String> getAltarNames() {return altars.keySet();}
 
     public void cancelAction(Player player) {
+        if (currentAction == null) return;
         currentAction.cancel(player);
         currentAction = null;
     }

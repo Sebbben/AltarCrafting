@@ -37,6 +37,15 @@ public class AddRecipe implements AltarAction{
         altarHandler.addRecipe(altarName, recipe);
         PlayerInteractEvent.getHandlerList().unregister(recipeConfigurationListener);
         InventoryCloseEvent.getHandlerList().unregister(recipeConfigurationListener);
+
+        player.sendMessage("Recipe added!");
+
+        Inventory inv = player.getInventory();
+
+        for (int i=0;i<9;i++) {
+            inv.setItem(i, null);
+        }
+
     }
 
     @Override
