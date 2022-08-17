@@ -14,7 +14,7 @@ public abstract class Subcommand {
     }
 
     public abstract String getName();
-    public abstract List<String> getArgs();
+    public abstract List<String> getArgs(int numberOfArgs);
     public abstract void preform(Player player, String[] args);
 
     public abstract String getUsage();

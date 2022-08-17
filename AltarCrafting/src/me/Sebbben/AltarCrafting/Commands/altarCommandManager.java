@@ -18,12 +18,8 @@ public class altarCommandManager implements TabExecutor {
     public altarCommandManager(AltarHandler altarHandler) {
         this.altarHandler = altarHandler;
 
-
-        subcommands.add(new createAltarCommand(altarHandler));
-        subcommands.add(new listAltarsCommand(altarHandler));
-        subcommands.add(new removeAltarCommand(altarHandler));
-        subcommands.add(new addRecipeCommand(altarHandler));
-        subcommands.add(new listRecipesCommand(altarHandler));
+        subcommands.add(new AltarCommands(altarHandler));
+        subcommands.add(new RecipeCommands(altarHandler));
     }
 
     @Override
@@ -47,13 +43,13 @@ public class altarCommandManager implements TabExecutor {
                 if (subCmd.getName().startsWith(args[0])) {
                     options.add(subCmd.getName());
                 }
-            }
-        } else if (args.length == 2) {
+            }                          // /ac Recipe  list    Furnace
+        } else if (args.length >= 2) { // /ac argLen1 argLen2 argLen3
             for (Subcommand subCmd : subcommands) {
                 if (subCmd.getName().startsWith(args[0])) {
-                    if (subCmd.getArgs() == null) break;
-                    for (String s : subCmd.getArgs()) {
-                        if (s.startsWith(args[1])) {
+                    if (subCmd.getArgs(args.length) == null) break;
+                    for (String s : subCmd.getArgs(args.length-1)) {
+                        if (s.startsWith(args[args.length-1])) {
                             options.add(s);
                         }
                     }

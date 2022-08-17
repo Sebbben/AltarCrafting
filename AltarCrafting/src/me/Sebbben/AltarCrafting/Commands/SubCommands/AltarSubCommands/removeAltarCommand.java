@@ -1,6 +1,7 @@
-package me.Sebbben.AltarCrafting.Commands.SubCommands;
+package me.Sebbben.AltarCrafting.Commands.SubCommands.AltarSubCommands;
 
 import me.Sebbben.AltarCrafting.AltarHandler;
+import me.Sebbben.AltarCrafting.Commands.SubCommands.Subcommand;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -15,12 +16,14 @@ public class removeAltarCommand extends Subcommand {
 
     @Override
     public String getName() {
-        return "removeAltar";
+        return "remove";
     }
 
     @Override
-    public List<String> getArgs() {
-        return altarHandler.getAltarNames().stream().toList();
+    public List<String> getArgs(int numberOfArgs) {
+        if (numberOfArgs == 0)
+            return altarHandler.getAltarNames().stream().toList();
+        return null;
     }
 
     @Override

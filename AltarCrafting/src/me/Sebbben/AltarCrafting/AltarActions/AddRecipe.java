@@ -10,6 +10,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 public class AddRecipe implements AltarAction{
     private final RecipeConfigurationListener recipeConfigurationListener = new RecipeConfigurationListener(this);
     private final AltarHandler altarHandler;
@@ -24,11 +26,11 @@ public class AddRecipe implements AltarAction{
 
     }
 
-    public void setMaterials(ItemStack[] materials) {
+    public void setMaterials(List<ItemStack> materials) {
         recipe.setMaterials(materials);
     }
 
-    public void setResult(ItemStack[] result) {
+    public void setResult(List<ItemStack> result) {
         recipe.setResult(result);
     }
 

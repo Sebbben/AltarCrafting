@@ -57,6 +57,7 @@ public class AltarHandler {
             altars.put(key, altar);
         }
     }
+
     public void newAltar(String name) {
         currentAction = new CreateAltar(this, name);
     }

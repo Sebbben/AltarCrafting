@@ -1,6 +1,7 @@
-package me.Sebbben.AltarCrafting.Commands.SubCommands;
+package me.Sebbben.AltarCrafting.Commands.SubCommands.AltarSubCommands;
 
 import me.Sebbben.AltarCrafting.AltarHandler;
+import me.Sebbben.AltarCrafting.Commands.SubCommands.Subcommand;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -15,11 +16,11 @@ public class listAltarsCommand extends Subcommand {
 
     @Override
     public String getName() {
-        return "listAltars";
+        return "list";
     }
 
     @Override
-    public List<String> getArgs() {
+    public List<String> getArgs(int numberOfArgs) {
         return null;
     }
 

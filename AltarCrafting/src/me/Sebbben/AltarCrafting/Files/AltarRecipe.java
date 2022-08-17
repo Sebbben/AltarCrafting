@@ -3,11 +3,13 @@ package me.Sebbben.AltarCrafting.Files;
 
 import org.bukkit.inventory.ItemStack;
 
-public class AltarRecipe {
-    private ItemStack[] materials;
-    private ItemStack[] result;
+import java.util.List;
 
-    public AltarRecipe(ItemStack[] materials, ItemStack[] result) {
+public class AltarRecipe {
+    private List<ItemStack> materials;
+    private List<ItemStack> result;
+
+    public AltarRecipe(List<ItemStack> materials, List<ItemStack> result) {
         this.materials = materials;
         this.result = result;
     }
@@ -16,16 +18,16 @@ public class AltarRecipe {
         return;
     }
 
-    public ItemStack[] getMaterials() {
+    public List<ItemStack> getMaterials() {
         return materials;
     }
-    public void setMaterials(ItemStack[] materials) {
+    public void setMaterials(List<ItemStack> materials) {
         this.materials = materials;
     }
-    public ItemStack[] getResult() {
+    public List<ItemStack> getResult() {
         return result;
     }
-    public void setResult(ItemStack[] result) {
+    public void setResult(List<ItemStack> result) {
         this.result = result;
     }
 

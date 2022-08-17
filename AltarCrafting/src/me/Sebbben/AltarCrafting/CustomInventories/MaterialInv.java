@@ -1,9 +1,15 @@
 package me.Sebbben.AltarCrafting.CustomInventories;
 
 import me.Sebbben.AltarCrafting.AltarActions.AddRecipe;
+import me.Sebbben.AltarCrafting.Files.AltarRecipe;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class MaterialInv extends CustomInventory{
     private final AddRecipe addRecipe;
@@ -26,8 +32,13 @@ public class MaterialInv extends CustomInventory{
     }
 
     @Override
+    public Inventory getInventory(List<AltarRecipe> recipes) {
+        return null;
+    }
+
+    @Override
     public void onClose(InventoryCloseEvent e) {
-        addRecipe.setMaterials(e.getInventory().getContents());
+        addRecipe.setMaterials(Arrays.stream(e.getInventory().getContents()).toList());
         e.getPlayer().sendMessage("Crafting Materials Set!");
         items = e.getInventory().getContents().clone();
     }

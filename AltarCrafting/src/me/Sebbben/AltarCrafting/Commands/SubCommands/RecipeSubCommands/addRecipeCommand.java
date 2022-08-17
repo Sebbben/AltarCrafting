@@ -1,13 +1,14 @@
-package me.Sebbben.AltarCrafting.Commands.SubCommands;
+package me.Sebbben.AltarCrafting.Commands.SubCommands.RecipeSubCommands;
 
 import me.Sebbben.AltarCrafting.AltarHandler;
+import me.Sebbben.AltarCrafting.Commands.SubCommands.Subcommand;
 import me.Sebbben.AltarCrafting.Files.CustomItems;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.List;
 
-public class addRecipeCommand extends Subcommand{
+public class addRecipeCommand extends Subcommand {
 
     public addRecipeCommand(AltarHandler altarHandler) {
         super(altarHandler);
@@ -15,11 +16,11 @@ public class addRecipeCommand extends Subcommand{
 
     @Override
     public String getName() {
-        return "addRecipe";
+        return "add";
     }
 
     @Override
-    public List<String> getArgs() {
+    public List<String> getArgs(int numberOfArgs) {
         return altarHandler.getAltarNames().stream().toList();
     }
 

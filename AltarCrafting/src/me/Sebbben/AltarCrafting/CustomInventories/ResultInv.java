@@ -1,9 +1,13 @@
 package me.Sebbben.AltarCrafting.CustomInventories;
 
 import me.Sebbben.AltarCrafting.AltarActions.AddRecipe;
+import me.Sebbben.AltarCrafting.Files.AltarRecipe;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ResultInv extends CustomInventory{
     private final AddRecipe addRecipe;
@@ -26,8 +30,13 @@ public class ResultInv extends CustomInventory{
     }
 
     @Override
+    public Inventory getInventory(List<AltarRecipe> recipes) {
+        return null;
+    }
+
+    @Override
     public void onClose(InventoryCloseEvent e) {
-        addRecipe.setResult(e.getInventory().getContents());
+        addRecipe.setResult(Arrays.stream(e.getInventory().getContents()).toList());
         items = e.getInventory().getContents().clone();
         e.getPlayer().sendMessage("Result Items Set!");
 

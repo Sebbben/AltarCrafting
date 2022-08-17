@@ -1,14 +1,17 @@
-package me.Sebbben.AltarCrafting.Commands.SubCommands;
+package me.Sebbben.AltarCrafting.Commands.SubCommands.AltarSubCommands;
 
 import me.Sebbben.AltarCrafting.AltarHandler;
+import me.Sebbben.AltarCrafting.Commands.SubCommands.Subcommand;
 import me.Sebbben.AltarCrafting.Files.CustomItems;
+import me.Sebbben.AltarCrafting.Main;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
-public class createAltarCommand extends Subcommand{
+public class createAltarCommand extends Subcommand {
 
     public createAltarCommand(AltarHandler altarHandler) {
         super(altarHandler);
@@ -16,11 +19,12 @@ public class createAltarCommand extends Subcommand{
 
     @Override
     public String getName() {
-        return "createAltar";
+        return "create";
     }
 
     @Override
-    public List<String> getArgs() {
+    public List<String> getArgs(int numberOfArgs) {
+        Main.getInstance().log(Level.ALL, "Iran");
         return Arrays.asList("Altar Name");
     }
 

@@ -1,14 +1,13 @@
-package me.Sebbben.AltarCrafting.Commands.SubCommands;
+package me.Sebbben.AltarCrafting.Commands.SubCommands.RecipeSubCommands;
 
 import me.Sebbben.AltarCrafting.AltarHandler;
+import me.Sebbben.AltarCrafting.Commands.SubCommands.Subcommand;
+import me.Sebbben.AltarCrafting.CustomInventories.RecipeListInv;
 import me.Sebbben.AltarCrafting.Files.AltarRecipe;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class listRecipesCommand extends Subcommand{
+public class listRecipesCommand extends Subcommand {
 
     public listRecipesCommand(AltarHandler altarHandler) {
         super(altarHandler);
@@ -16,11 +15,11 @@ public class listRecipesCommand extends Subcommand{
 
     @Override
     public String getName() {
-        return "listRecipes";
+        return "list";
     }
 
     @Override
-    public List<String> getArgs() {
+    public List<String> getArgs(int numberOfArgs) {
         return altarHandler.getAltarNames().stream().toList();
     }
 
@@ -39,12 +38,9 @@ public class listRecipesCommand extends Subcommand{
             player.sendMessage("Add some by using /ac addRecipe <Altar Name>");
             return;
         }
-        for (AltarRecipe recipe : recipes) {
-            List<String> mats = new ArrayList<>();
-            for (ItemStack mat : recipe.getMaterials()) {
-                player.sendMessage(mat.getType().toString());
-            }
-        }
+
+
+        player.openInventory(new RecipeListInv().getInventory(recipes));
     }
 
     @Override
