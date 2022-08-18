@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class MaterialInv extends CustomInventory{
     private final AddRecipe addRecipe;
@@ -38,7 +37,9 @@ public class MaterialInv extends CustomInventory{
 
     @Override
     public void onClose(InventoryCloseEvent e) {
-        addRecipe.setMaterials(Arrays.stream(e.getInventory().getContents()).toList());
+        List<ItemStack> i = new ArrayList<>(Arrays.stream(e.getInventory().getContents()).toList());
+        while (i.remove(null)){}
+        addRecipe.setMaterials(i);
         e.getPlayer().sendMessage("Crafting Materials Set!");
         items = e.getInventory().getContents().clone();
     }

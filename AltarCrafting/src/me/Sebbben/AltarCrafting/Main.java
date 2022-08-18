@@ -2,6 +2,7 @@ package me.Sebbben.AltarCrafting;
 
 import me.Sebbben.AltarCrafting.CustomConfigs.AltarsConfig;
 import me.Sebbben.AltarCrafting.Commands.altarCommandManager;
+import me.Sebbben.AltarCrafting.CustomConfigs.RecipesConfig;
 import me.Sebbben.AltarCrafting.Listeners.PreventUsageOfCustomItems;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,6 +30,10 @@ public class Main extends JavaPlugin {
         AltarsConfig.get().options().copyDefaults(true);
         AltarsConfig.save();
 
+        RecipesConfig.setup(this);
+        RecipesConfig.get().options().copyDefaults(true);
+        RecipesConfig.save();
+
         altarHandler = new AltarHandler(this);
         altarHandler.loadAltars();
 
@@ -37,11 +42,13 @@ public class Main extends JavaPlugin {
         this.getCommand("altarCrafting").setExecutor(manager);
         this.getCommand("altarCrafting").setTabCompleter(manager);
 
+
     }
 
     @Override
     public void onDisable() {
         altarHandler.saveAltars();
+        altarHandler.saveRecipes();
     }
 
     public void log(Level level, String s) {

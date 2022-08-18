@@ -5,13 +5,16 @@ import me.Sebbben.AltarCrafting.AltarActions.AltarAction;
 import me.Sebbben.AltarCrafting.AltarActions.AltarActionListener;
 import me.Sebbben.AltarCrafting.AltarActions.CreateAltar;
 import me.Sebbben.AltarCrafting.CustomConfigs.AltarsConfig;
+import me.Sebbben.AltarCrafting.CustomConfigs.RecipesConfig;
 import me.Sebbben.AltarCrafting.Files.Altar;
 import me.Sebbben.AltarCrafting.Files.AltarRecipe;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.logging.Level;
 
 public class AltarHandler {
     private final Main plugin;
@@ -21,7 +24,6 @@ public class AltarHandler {
     private AltarAction currentAction;
     public AltarHandler(Main plugin) {
         this.plugin = plugin;
-
         plugin.getServer().getPluginManager().registerEvents(new AltarActionListener(this), plugin);
 
     }
@@ -57,6 +59,29 @@ public class AltarHandler {
             altars.put(key, altar);
         }
     }
+
+    public void saveRecipes() {
+        FileConfiguration config = AltarsConfig.get();
+        for (Map.Entry<String, List<AltarRecipe>> entry : recipes.entrySet()) {
+            String basePath = entry.getKey();
+            for (int i=0; i<entry.getValue().size(); i++) {
+                AltarRecipe recipe = entry.getValue().get(i);
+                String recipePath = basePath + "." + i + ".materials";
+
+                for (int j=0; j<recipe.getMaterials().size(); j++) {
+                    String materialPath = recipePath + "." + j;
+                    config.set(materialPath, recipe.getMaterials().get(j));
+                }
+
+            }
+        }
+        RecipesConfig.save();
+    }
+
+    public void loadRecipes() {
+        return;
+    }
+
 
     public void newAltar(String name) {
         currentAction = new CreateAltar(this, name);

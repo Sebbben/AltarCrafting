@@ -24,15 +24,17 @@ public class listRecipesCommand extends Subcommand {
     }
 
     @Override
-    public void preform(Player player, String[] args) { // /ac listRecipes <Altar Name>
-        if (args.length < 2) {
+    public void preform(Player player, String[] args) { // /ac recipe list <Altar Name>
+        if (args.length < 3) {
             player.sendMessage("You need to provide an altar to list recipes");
             player.sendMessage("Use " + getUsage());
             return;
         }
 
 
-        List<AltarRecipe> recipes = altarHandler.getRecipesFor(args[1]);
+        List<AltarRecipe> recipes = altarHandler.getRecipesFor(args[2]);
+        player.sendMessage(String.valueOf(recipes));
+        player.sendMessage(args[2]);
         if (recipes == null) {
             player.sendMessage("This altar does not have any recipes!");
             player.sendMessage("Add some by using /ac addRecipe <Altar Name>");

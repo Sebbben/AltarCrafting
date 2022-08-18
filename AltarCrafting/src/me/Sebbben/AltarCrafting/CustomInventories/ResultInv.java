@@ -6,6 +6,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,7 +37,9 @@ public class ResultInv extends CustomInventory{
 
     @Override
     public void onClose(InventoryCloseEvent e) {
-        addRecipe.setResult(Arrays.stream(e.getInventory().getContents()).toList());
+        List<ItemStack> i = new ArrayList<>(Arrays.stream(e.getInventory().getContents()).toList());
+        while (i.remove(null)){}
+        addRecipe.setResult(i);
         items = e.getInventory().getContents().clone();
         e.getPlayer().sendMessage("Result Items Set!");
 

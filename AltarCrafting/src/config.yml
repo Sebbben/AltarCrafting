@@ -1,0 +1,12 @@
+Furnace:
+  1:
+    materials:
+      1:
+        type: IRON_ORE
+        amount: 64
+      2:
+        type: COAL
+        amount: 16
+
+      IRON_ORE: 64
+      COAL: 16
