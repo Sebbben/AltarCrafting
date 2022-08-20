@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -61,16 +62,22 @@ public class AltarHandler {
     }
 
     public void saveRecipes() {
-        FileConfiguration config = AltarsConfig.get();
+        FileConfiguration config = RecipesConfig.get();
         for (Map.Entry<String, List<AltarRecipe>> entry : recipes.entrySet()) {
             String basePath = entry.getKey();
             for (int i=0; i<entry.getValue().size(); i++) {
                 AltarRecipe recipe = entry.getValue().get(i);
-                String recipePath = basePath + "." + i + ".materials";
+                String recipePath = basePath + "." + i;
 
                 for (int j=0; j<recipe.getMaterials().size(); j++) {
-                    String materialPath = recipePath + "." + j;
+
+                    String materialPath = recipePath + ".materials." + j;
                     config.set(materialPath, recipe.getMaterials().get(j));
+                }
+
+                for (int j=0; j<recipe.getResult().size(); j++) {
+                    String resultPath = recipePath + ".results." + j;
+                    config.set(resultPath, recipe.getResult().get(j));
                 }
 
             }
@@ -79,7 +86,27 @@ public class AltarHandler {
     }
 
     public void loadRecipes() {
-        return;
+        FileConfiguration config = RecipesConfig.get();
+        Set<String> altarRecipes = config.getKeys(false);
+        for (String altar : altarRecipes) {
+            for (String recipeNum : config.getConfigurationSection(altar).getKeys(false)) {
+                List<ItemStack> materials = new ArrayList<>();
+                List<ItemStack> results = new ArrayList<>();
+
+
+                for (String materialNum : config.getConfigurationSection(altar + "." + recipeNum + ".materials").getKeys(false)) {
+                    materials.add(config.getItemStack(altar + "." + recipeNum + ".materials." + materialNum));
+                }
+                for (String resultNum : config.getConfigurationSection(altar + "." + recipeNum + ".results").getKeys(false)) {
+                    results.add(config.getItemStack(altar + "." + recipeNum + ".results." + resultNum));
+                }
+
+                AltarRecipe recipe = new AltarRecipe(materials, results);
+
+                addRecipe(altar, recipe);
+
+            }
+        }
     }
 
 
@@ -115,6 +142,7 @@ public class AltarHandler {
     public void addRecipe(String altarName, AltarRecipe recipe) {
         recipes.computeIfAbsent(altarName, k -> new ArrayList<>());
         recipes.get(altarName).add(recipe);
+        saveRecipes();
     }
 
     public List<AltarRecipe> getRecipesFor(String altarName) {

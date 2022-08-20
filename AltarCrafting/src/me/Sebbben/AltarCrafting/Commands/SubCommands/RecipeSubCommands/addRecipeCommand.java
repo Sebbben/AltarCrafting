@@ -25,15 +25,15 @@ public class addRecipeCommand extends Subcommand {
     }
 
     @Override
-    public void preform(Player player, String[] args) { // /ac addRecipe <AltarName>
+    public void preform(Player player, String[] args) { // /ac recipe add <AltarName>
 
-        if (args.length < 2) {
+        if (args.length < 3) {
             player.sendMessage("You need to provide an altar to add the recipe to!");
             player.sendMessage("Use " + getUsage());
             return;
         }
 
-        altarHandler.createRecipe(args[1]);
+        altarHandler.createRecipe(args[2]);
 
         player.sendMessage("New Recipe creation begun!");
 

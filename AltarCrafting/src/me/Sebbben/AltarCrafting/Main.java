@@ -36,6 +36,7 @@ public class Main extends JavaPlugin {
 
         altarHandler = new AltarHandler(this);
         altarHandler.loadAltars();
+        altarHandler.loadRecipes();
 
         altarCommandManager manager = new altarCommandManager(altarHandler);
 
