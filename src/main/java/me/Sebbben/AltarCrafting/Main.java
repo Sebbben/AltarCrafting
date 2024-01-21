@@ -52,8 +52,4 @@ public class Main extends JavaPlugin {
         altarHandler.saveRecipes();
     }
 
-    public void log(Level level, String s) {
-        getLogger().log(level, s);
-    }
-
 }

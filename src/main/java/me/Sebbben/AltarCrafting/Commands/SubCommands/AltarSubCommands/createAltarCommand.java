@@ -24,7 +24,6 @@ public class createAltarCommand extends Subcommand {
 
     @Override
     public List<String> getArgs(int numberOfArgs) {
-        Main.getInstance().log(Level.ALL, "Iran");
         return Arrays.asList("Altar Name");
     }
 

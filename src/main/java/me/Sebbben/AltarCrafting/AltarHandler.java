@@ -79,7 +79,6 @@ public class AltarHandler {
                     String resultPath = recipePath + ".results." + j;
                     config.set(resultPath, recipe.getResult().get(j));
                 }
-
             }
         }
         RecipesConfig.save();
