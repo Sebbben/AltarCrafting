@@ -1,6 +1,6 @@
 name: AltarCrafting
 version: 1.0
-api-version: 1.19
+api-version: 1.20
 main: me.Sebbben.AltarCrafting.Main
 commands:
   altarCrafting:
