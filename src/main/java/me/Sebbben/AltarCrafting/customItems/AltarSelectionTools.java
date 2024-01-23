@@ -1,10 +1,7 @@
-package me.Sebbben.AltarCrafting.CustomItems;
+package me.Sebbben.AltarCrafting.customItems;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.TextColor;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

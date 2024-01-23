@@ -1,13 +1,13 @@
 package me.Sebbben.AltarCrafting;
 
-import me.Sebbben.AltarCrafting.CustomItems.AltarSelectionTools;
-import me.Sebbben.AltarCrafting.Listeners.AltarSelectionListener;
-import org.bukkit.Location;
+import me.Sebbben.AltarCrafting.customItems.AltarSelectionTools;
+import me.Sebbben.AltarCrafting.listeners.AltarSelectionListener;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.BoundingBox;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class AltarManager {
     private final HashMap<String, Altar> altars = new HashMap<>();
@@ -30,6 +30,9 @@ public class AltarManager {
     public void saveAltars() {}
     public void loadAltars() {}
 
+    public Set<String> getAltarNames() {
+        return this.altars.keySet();
+    }
     public void startSelectionProcess(String altarName, Player player, boolean useTools) {
         if (useTools) {
             if (!this.selectionListener.isActivePlayer(player)) {

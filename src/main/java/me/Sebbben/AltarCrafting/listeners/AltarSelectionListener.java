@@ -1,9 +1,7 @@
-package me.Sebbben.AltarCrafting.Listeners;
+package me.Sebbben.AltarCrafting.listeners;
 
 import me.Sebbben.AltarCrafting.Altar;
-import me.Sebbben.AltarCrafting.AltarManager;
-import me.Sebbben.AltarCrafting.CustomItems.AltarSelectionTools;
-import me.Sebbben.AltarCrafting.Main;
+import me.Sebbben.AltarCrafting.customItems.AltarSelectionTools;
 import me.Sebbben.AltarCrafting.utils.particleUtils.ParticleSpawner;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
