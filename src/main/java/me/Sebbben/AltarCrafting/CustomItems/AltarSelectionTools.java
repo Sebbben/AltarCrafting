@@ -2,6 +2,7 @@ package me.Sebbben.AltarCrafting.CustomItems;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.format.TextColor;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -20,7 +21,7 @@ public class AltarSelectionTools {
 
         cornerSelectTool = new ItemStack(Material.WOODEN_SHOVEL,1);
         ItemMeta corner1Meta = cornerSelectTool.getItemMeta();
-        corner1Meta.displayName(Component.text(Color.RED + "Corner Select Tool"));
+        corner1Meta.displayName(Component.text( "Corner Select Tool", TextColor.color(0,255,255)));
         corner1Meta.setUnbreakable(true);
         cornerSelectTool.setItemMeta(corner1Meta);
 
@@ -32,7 +33,7 @@ public class AltarSelectionTools {
 
         finishItem = new ItemStack(Material.EMERALD,1);
         ItemMeta finishItemMeta = finishItem.getItemMeta();
-        finishItemMeta.displayName(Component.text(Color.GREEN + "Finish"));
+        finishItemMeta.displayName(Component.text("Finish",TextColor.color(0,255,0)));
         finishItemMeta.setUnbreakable(true);
         finishItem.setItemMeta(finishItemMeta);
 
@@ -44,7 +45,7 @@ public class AltarSelectionTools {
 
         cancelItem = new ItemStack(Material.BARRIER,1);
         ItemMeta cancelItemMeta = cancelItem.getItemMeta();
-        cancelItemMeta.displayName(Component.text(Color.RED + "Cancel"));
+        cancelItemMeta.displayName(Component.text("Cancel", TextColor.color(255,0,0)));
         cancelItemMeta.setUnbreakable(true);
         cancelItem.setItemMeta(cancelItemMeta);
 

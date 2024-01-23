@@ -38,6 +38,8 @@ public class Altar {
 
     public void place(Location location) {}
 
+    public void updateBlocks() {}
+
     /**
      * Takes a location and sets the corners of the altar to given corners when two corners have been provided.
      * @param location A location to set the next corner to.
@@ -46,6 +48,7 @@ public class Altar {
     public boolean addCorner(Location location) {
         if (this.tempCorner == null) {
             this.tempCorner = location;
+            return false;
         } else {
             this.bounds = new BoundingBox(
                     this.tempCorner.getBlockX(),
@@ -56,6 +59,11 @@ public class Altar {
                     location.getBlockZ()
             );
             this.tempCorner = null;
+            return true;
         }
+    }
+
+    public BoundingBox getBounds() {
+        return this.bounds;
     }
 }

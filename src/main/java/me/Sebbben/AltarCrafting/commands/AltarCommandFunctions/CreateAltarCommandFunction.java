@@ -13,9 +13,9 @@ public class CreateAltarCommandFunction extends CommandFunction {
     private final AltarManager altarManager = Main.getInstance().getAltarManager();
     @Override
     public List<String> getValidArgs(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 0)
+        if (args.length == 1)
             return List.of("<Altar Name>");
-        else if (args.length == 1) {
+        else if (args.length == 2) {
             return List.of("tools", "notools");
         }
         return null;
@@ -28,11 +28,12 @@ public class CreateAltarCommandFunction extends CommandFunction {
             sender.sendMessage("You must provide a name for the new Altar!");
             return false;
         }
+        String altarName = args[1];
+        this.altarManager.createAltar(altarName);
 
-        this.altarManager.createAltar(args[1]);
-
-        if (args.length == 2 && args[1].equals("tools")) {
-            this.altarManager.startToolSelectionProcess((Player) sender);
+        if (args.length == 2) {
+            boolean useTools = args[1].equals("tools");
+            this.altarManager.startSelectionProcess(altarName, (Player) sender, useTools);
         }
 
         return true;

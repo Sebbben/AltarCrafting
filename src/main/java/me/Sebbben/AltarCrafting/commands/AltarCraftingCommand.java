@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AltarCraftingCommand extends SubCommand implements TabExecutor {
     public AltarCraftingCommand(String commandName) {
-        super("AltarCrafting");
+        super("altarCrafting");
 
         this.addSubCommand("altar");
 

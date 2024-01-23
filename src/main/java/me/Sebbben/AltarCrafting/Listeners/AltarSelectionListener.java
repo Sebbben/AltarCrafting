@@ -1,7 +1,10 @@
 package me.Sebbben.AltarCrafting.Listeners;
 
 import me.Sebbben.AltarCrafting.Altar;
+import me.Sebbben.AltarCrafting.AltarManager;
 import me.Sebbben.AltarCrafting.CustomItems.AltarSelectionTools;
+import me.Sebbben.AltarCrafting.Main;
+import me.Sebbben.AltarCrafting.utils.particleUtils.ParticleSpawner;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,8 +21,8 @@ public class AltarSelectionListener implements Listener {
     public void addActivePlayer(Player player, Altar altar) {
         this.activePlayers.put(player.getUniqueId(), altar);
     }
-    public void removeActivePlayer(Player player) {
-        this.activePlayers.remove(player.getUniqueId());
+    public Altar removeActivePlayer(Player player) {
+        return this.activePlayers.remove(player.getUniqueId());
     }
     public boolean isActivePlayer(Player player) {
         return this.activePlayers.containsKey(player.getUniqueId());
@@ -34,9 +37,19 @@ public class AltarSelectionListener implements Listener {
         if  (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (mainHand.isSimilar(AltarSelectionTools.getCornerSelectTool())) {
                 if (e.getClickedBlock() == null) return;
+                e.getPlayer().sendMessage("Selected a corner");
                 boolean finished = this.activePlayers.get(e.getPlayer().getUniqueId()).addCorner(e.getClickedBlock().getLocation());
                 if (finished) {
-                    this.activePlayers.remove(e.getPlayer().getUniqueId());
+                    e.getPlayer().sendMessage("finished altar selection");
+                    Altar altar = this.removeActivePlayer(e.getPlayer());
+                    e.getPlayer().sendMessage(altar.getBounds().toString());
+                    altar.updateBlocks();
+                    ParticleSpawner ps = new ParticleSpawner(e.getPlayer().getWorld());
+                    ps.spawnParticleBox(altar.getBounds());
+                }
+                else {
+                    ParticleSpawner ps = new ParticleSpawner(e.getPlayer().getWorld());
+                    ps.spawnParticleBox(e.getClickedBlock().getLocation(), e.getClickedBlock().getLocation());
                 }
             }
         }
