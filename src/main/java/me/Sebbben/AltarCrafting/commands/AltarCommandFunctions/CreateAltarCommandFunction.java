@@ -5,6 +5,7 @@ import me.Sebbben.AltarCrafting.Main;
 import me.Sebbben.AltarCrafting.utils.commandUtils.CommandFunction;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -12,7 +13,12 @@ public class CreateAltarCommandFunction extends CommandFunction {
     private final AltarManager altarManager = Main.getInstance().getAltarManager();
     @Override
     public List<String> getValidArgs(CommandSender sender, Command command, String label, String[] args) {
-        return List.of("<Altar Name>");
+        if (args.length == 0)
+            return List.of("<Altar Name>");
+        else if (args.length == 1) {
+            return List.of("tools", "notools");
+        }
+        return null;
     }
 
     @Override
@@ -24,6 +30,11 @@ public class CreateAltarCommandFunction extends CommandFunction {
         }
 
         this.altarManager.createAltar(args[1]);
+
+        if (args.length == 2 && args[1].equals("tools")) {
+            this.altarManager.startToolSelectionProcess((Player) sender);
+        }
+
         return true;
     }
 

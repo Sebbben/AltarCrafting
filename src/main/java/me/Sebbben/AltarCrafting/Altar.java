@@ -3,12 +3,16 @@ package me.Sebbben.AltarCrafting;
 import com.google.common.util.concurrent.ClosingFuture;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.util.BoundingBox;
 
 import java.util.ArrayList;
 
 public class Altar {
     private String name;
     private final ArrayList<AltarFeature> features = new ArrayList<>();
+    private BoundingBox bounds;
+    private Location tempCorner;
+
     public Altar(String name) {
         this.name = name;
     }
@@ -34,4 +38,24 @@ public class Altar {
 
     public void place(Location location) {}
 
+    /**
+     * Takes a location and sets the corners of the altar to given corners when two corners have been provided.
+     * @param location A location to set the next corner to.
+     * @return A boolean telling whether there has been created a bounding box.
+     */
+    public boolean addCorner(Location location) {
+        if (this.tempCorner == null) {
+            this.tempCorner = location;
+        } else {
+            this.bounds = new BoundingBox(
+                    this.tempCorner.getBlockX(),
+                    this.tempCorner.getBlockY(),
+                    this.tempCorner.getBlockZ(),
+                    location.getBlockX(),
+                    location.getBlockY(),
+                    location.getBlockZ()
+            );
+            this.tempCorner = null;
+        }
+    }
 }
