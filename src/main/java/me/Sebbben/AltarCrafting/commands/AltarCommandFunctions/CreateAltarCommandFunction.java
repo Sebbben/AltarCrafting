@@ -28,9 +28,9 @@ public class CreateAltarCommandFunction extends CommandFunction {
             sender.sendMessage("You must provide a name for the new Altar!");
             return false;
         }
-        String altarName = args[1];
+        String altarName = args[0];
         this.altarManager.createAltar(altarName);
-
+        sender.sendMessage(args);
         if (args.length == 2) {
             boolean useTools = args[1].equals("tools");
             this.altarManager.startSelectionProcess(altarName, (Player) sender, useTools);

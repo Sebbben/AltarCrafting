@@ -1,7 +1,10 @@
 package me.Sebbben.AltarCrafting;
 
 import me.Sebbben.AltarCrafting.commands.AltarCraftingCommand;
+import me.Sebbben.AltarCrafting.customSaveFiles.AltarConfigurationHandler;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Level;
 
 public class Main extends JavaPlugin {
 
@@ -15,6 +18,8 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        this.saveDefaultConfig();
+        AltarConfigurationHandler.setup();
         this.altarManager = new AltarManager();
         AltarCraftingCommand acCommand = new AltarCraftingCommand("altarCrafting");
         this.getCommand("altarCrafting").setExecutor(acCommand);
@@ -22,7 +27,9 @@ public class Main extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {}
+    public void onDisable() {
+        this.altarManager.saveAltars();
+    }
 
     public AltarManager getAltarManager() {
         return this.altarManager;

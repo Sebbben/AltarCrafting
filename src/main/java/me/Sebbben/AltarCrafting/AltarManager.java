@@ -1,7 +1,10 @@
 package me.Sebbben.AltarCrafting;
 
 import me.Sebbben.AltarCrafting.customItems.AltarSelectionTools;
+import me.Sebbben.AltarCrafting.customSaveFiles.AltarConfigurationHandler;
 import me.Sebbben.AltarCrafting.listeners.AltarSelectionListener;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.BoundingBox;
@@ -11,11 +14,12 @@ import java.util.Set;
 
 public class AltarManager {
     private final HashMap<String, Altar> altars = new HashMap<>();
-    private final AltarSelectionListener selectionListener = new AltarSelectionListener();
+    private final AltarSelectionListener selectionListener;
     private final Main plugin;
 
     public AltarManager() {
         this.plugin = Main.getInstance();
+        this.selectionListener = new AltarSelectionListener();
         this.plugin.getServer().getPluginManager().registerEvents(this.selectionListener, this.plugin);
     }
 
@@ -27,7 +31,19 @@ public class AltarManager {
     public void removeAltarFeature(String name, AltarFeature feature) {}
     public void renameAltar(String oldName, String newName) {}
     public void removeAltar(String name) {}
-    public void saveAltars() {}
+    public void saveAltars() {
+        YamlConfiguration altarConfig = AltarConfigurationHandler.get();
+        ConfigurationSection altarConfigSection;
+        for (String name : altars.keySet()) {
+            if (altarConfig.contains(name)) {
+                altarConfigSection = altarConfig.getConfigurationSection(name);
+            } else {
+                altarConfigSection = altarConfig.createSection(name);
+            }
+            altars.get(name).saveToConfig(altarConfigSection);
+        }
+        AltarConfigurationHandler.save();
+    }
     public void loadAltars() {}
 
     public Set<String> getAltarNames() {
