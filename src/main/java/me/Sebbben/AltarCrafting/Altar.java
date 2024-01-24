@@ -8,6 +8,7 @@ import org.bukkit.util.BoundingBox;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class Altar {
@@ -94,5 +95,11 @@ public class Altar {
     public void saveToConfig(ConfigurationSection configSection) {
         ConfigurationSection blocksConfigSection = configSection.createSection("blocks");
         configSection.set("blocks", this.blocks);
+    }
+    public void loadFromCofig(ConfigurationSection config) {
+        this.blocks = new ArrayList<>();
+        for (Map<?, ?> block : config.getMapList("blocks")) {
+            this.blocks.add((HashMap<String, String>) block);
+        }
     }
 }

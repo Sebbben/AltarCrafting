@@ -11,6 +11,7 @@ import org.bukkit.util.BoundingBox;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class AltarManager {
     private final HashMap<String, Altar> altars = new HashMap<>();
@@ -21,6 +22,7 @@ public class AltarManager {
         this.plugin = Main.getInstance();
         this.selectionListener = new AltarSelectionListener();
         this.plugin.getServer().getPluginManager().registerEvents(this.selectionListener, this.plugin);
+        this.loadAltars();
     }
 
     public void createAltar(String name) {
@@ -44,7 +46,17 @@ public class AltarManager {
         }
         AltarConfigurationHandler.save();
     }
-    public void loadAltars() {}
+    public void loadAltars() {
+        YamlConfiguration config = AltarConfigurationHandler.get();
+        for (String name : config.getKeys(false)) {
+            this.createAltar(name);
+            try {
+                this.altars.get(name).loadFromCofig(config.getConfigurationSection(name));
+            } catch (ClassCastException ex) {
+                this.plugin.getLogger().log(Level.WARNING, "Could not load altar " + name);
+            }
+        }
+    }
 
     public Set<String> getAltarNames() {
         return this.altars.keySet();

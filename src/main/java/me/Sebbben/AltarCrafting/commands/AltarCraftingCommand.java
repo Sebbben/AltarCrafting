@@ -2,6 +2,7 @@ package me.Sebbben.AltarCrafting.commands;
 
 import me.Sebbben.AltarCrafting.commands.AltarCommandFunctions.CreateAltarCommandFunction;
 import me.Sebbben.AltarCrafting.commands.AltarCommandFunctions.ListAltarsCommandFunction;
+import me.Sebbben.AltarCrafting.commands.AltarCommandFunctions.SaveAltarsCommandFunction;
 import me.Sebbben.AltarCrafting.utils.commandUtils.SubCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -18,6 +19,7 @@ public class AltarCraftingCommand extends SubCommand implements TabExecutor {
         this.addSubCommand("altar");
         this.getSubCommand("altar").addSubCommand("create").setCommandFunction(new CreateAltarCommandFunction());
         this.getSubCommand("altar").addSubCommand("list").setCommandFunction(new ListAltarsCommandFunction());
+        this.getSubCommand("altar").addSubCommand("save").setCommandFunction(new SaveAltarsCommandFunction());
     }
 
     @Override
