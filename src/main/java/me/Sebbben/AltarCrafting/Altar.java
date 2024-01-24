@@ -102,4 +102,8 @@ public class Altar {
             this.blocks.add((HashMap<String, String>) block);
         }
     }
+
+    public void rename(String newName) {
+        this.name = newName;
+    }
 }

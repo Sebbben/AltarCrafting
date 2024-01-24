@@ -31,8 +31,15 @@ public class AltarManager {
     public void setAltarStructure(String name, BoundingBox bounds) {}
     public void addAltarFeature(String name, AltarFeature feature) {}
     public void removeAltarFeature(String name, AltarFeature feature) {}
-    public void renameAltar(String oldName, String newName) {}
-    public void removeAltar(String name) {}
+    public void renameAltar(String oldName, String newName) {
+        if (!this.altars.containsKey(newName)) {
+            this.altars.put(newName, this.altars.remove(oldName));
+            this.altars.get(newName).rename(newName);
+        }
+    }
+    public void removeAltar(String name) {
+        this.altars.remove(name);
+    }
     public void saveAltars() {
         YamlConfiguration altarConfig = AltarConfigurationHandler.get();
         ConfigurationSection altarConfigSection;
