@@ -1,5 +1,6 @@
 package me.Sebbben.AltarCrafting.utils.commandUtils;
 
+import me.Sebbben.AltarCrafting.Main;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 public class SubCommand {
     private final HashMap<String, SubCommand> subCommands = new HashMap<>();
@@ -24,7 +26,10 @@ public class SubCommand {
         if (this.subCommands.containsKey(subCommandPath)) return this.subCommands.get(subCommandPath);
         String subCommand = subCommandPath.substring(0,subCommandPath.indexOf("."));
         if (this.subCommands.containsKey(subCommand)) {
-            return this.subCommands.get(subCommand).getSubCommand(subCommandPath.substring(subCommand.indexOf(".",subCommandPath.length())));
+            int index = subCommandPath.indexOf(".");
+            if (index == -1) return null;
+            String subPath = subCommandPath.substring(index+1);
+            return this.subCommands.get(subCommand).getSubCommand(subPath);
         } else return null;
     }
 

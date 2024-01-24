@@ -8,10 +8,9 @@ import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
-public class RemoveAltarCommandFunction extends CommandFunction {
+public class AddAltarFeatureCommandFunction extends CommandFunction {
     AltarManager altarManager = Main.getInstance().getAltarManager();
     @Override
     public List<String> getValidArgs(CommandSender sender, Command command, String label, String[] args) {
@@ -20,18 +19,25 @@ public class RemoveAltarCommandFunction extends CommandFunction {
             List<String> valid = new ArrayList<>(names.size());
             valid.addAll(names);
             return valid;
+        } else if (args.length == 2) {
+            Set<String> names = this.altarManager.getAltarFeatureNames();
+            List<String> valid = new ArrayList<>(names.size());
+            valid.addAll(names);
+            return valid;
         }
+
         return null;
     }
 
     @Override
     public boolean execute(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length < 2 || !Objects.equals(args[1], "confirm")) {
-            sender.sendMessage("You must write 'confim' at the end of command to remove altar");
+
+        if (args.length != 2) {
+            sender.sendMessage("Wrong usage");
             return false;
         }
 
-        this.altarManager.removeAltar(args[0]);
+        this.altarManager.addAltarFeature(args[0],args[1]);
         return true;
     }
 }

@@ -6,15 +6,20 @@ import me.Sebbben.AltarCrafting.utils.commandUtils.CommandFunction;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class RenameAltarCommandFunction extends CommandFunction {
     AltarManager altarManager = Main.getInstance().getAltarManager();
     @Override
     public List<String> getValidArgs(CommandSender sender, Command command, String label, String[] args) {
         if (args.length < 2) {
-            return (List<String>) this.altarManager.getAltarNames();
+            Set<String> names = Main.getInstance().getAltarManager().getAltarNames();
+            List<String> valid = new ArrayList<>(names.size());
+            valid.addAll(names);
+            return valid;
         }
         return null;
     }

@@ -1,15 +1,23 @@
 package me.Sebbben.AltarCrafting;
 
+import com.google.gson.JsonArray;
 import me.Sebbben.AltarCrafting.customItems.AltarSelectionTools;
 import me.Sebbben.AltarCrafting.customSaveFiles.AltarConfigurationHandler;
 import me.Sebbben.AltarCrafting.listeners.AltarSelectionListener;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.BoundingBox;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -17,6 +25,7 @@ public class AltarManager {
     private final HashMap<String, Altar> altars = new HashMap<>();
     private final AltarSelectionListener selectionListener;
     private final Main plugin;
+    private final HashMap<String, AltarFeature> altarFeatures = new HashMap<>();
 
     public AltarManager() {
         this.plugin = Main.getInstance();
@@ -85,6 +94,35 @@ public class AltarManager {
             }
         } else {
             // TODO: Implement a command based system for selecting corners of altar
+        }
+    }
+
+    public void registerAltarFeature(String name, AltarFeature altarFeature) {
+        this.altarFeatures.put(name, altarFeature);
+    }
+
+    public Set<String> getAltarFeatureNames() {
+        return this.altarFeatures.keySet();
+    }
+
+    public void addAltarFeature(String altarName, String featureName) {
+        this.altars.get(altarName).addFeature(this.altarFeatures.get(featureName));
+    }
+
+    public void placeAltar(Location location, String altarName) {
+        World world = location.getWorld();
+        Altar altar = this.altars.get(altarName);
+
+        for (HashMap<String,String> block : altar.getBlocks()) {
+            Location worldLoc = new Location(
+                    world,
+                    location.getBlockX()+Integer.parseInt(block.get("x")),
+                    location.getBlockY()+Integer.parseInt(block.get("y")),
+                    location.getBlockZ()+Integer.parseInt(block.get("z"))
+
+            );
+            Material mat = Material.matchMaterial(block.get("type"));
+            world.getBlockAt(worldLoc).setType(mat);
         }
     }
 }

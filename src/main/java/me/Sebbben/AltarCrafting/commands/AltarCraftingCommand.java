@@ -20,7 +20,10 @@ public class AltarCraftingCommand extends SubCommand implements TabExecutor {
         this.getSubCommand("altar").addSubCommand("save").setCommandFunction(new SaveAltarsCommandFunction());
         this.getSubCommand("altar").addSubCommand("remove").setCommandFunction(new RemoveAltarCommandFunction());
         this.getSubCommand("altar").addSubCommand("rename").setCommandFunction(new RenameAltarCommandFunction());
+        this.getSubCommand("altar").addSubCommand("place").setCommandFunction(new PlaceAltarCommandFunction());
 
+        this.getSubCommand("altar").addSubCommand("feature");
+        this.getSubCommand("altar.feature").addSubCommand("add").setCommandFunction(new AddAltarFeatureCommandFunction());
     }
 
     @Override
