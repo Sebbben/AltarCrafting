@@ -1,11 +1,10 @@
 package me.Sebbben.AltarCrafting.commands.AltarCommandFunctions;
 
-import me.Sebbben.AltarCrafting.AltarManager;
+import me.Sebbben.AltarCrafting.managers.AltarManager;
 import me.Sebbben.AltarCrafting.Main;
 import me.Sebbben.AltarCrafting.utils.commandUtils.CommandFunction;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

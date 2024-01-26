@@ -2,9 +2,8 @@ package me.Sebbben.AltarCrafting;
 
 import me.Sebbben.AltarCrafting.commands.AltarCraftingCommand;
 import me.Sebbben.AltarCrafting.customSaveFiles.AltarConfigurationHandler;
+import me.Sebbben.AltarCrafting.managers.AltarManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.logging.Level;
 
 public class Main extends JavaPlugin {
 

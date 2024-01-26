@@ -1,6 +1,6 @@
 package me.Sebbben.AltarCrafting.commands.AltarCommandFunctions;
 
-import me.Sebbben.AltarCrafting.AltarManager;
+import me.Sebbben.AltarCrafting.managers.AltarManager;
 import me.Sebbben.AltarCrafting.Main;
 import me.Sebbben.AltarCrafting.utils.commandUtils.CommandFunction;
 import org.bukkit.command.Command;
@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class RenameAltarCommandFunction extends CommandFunction {

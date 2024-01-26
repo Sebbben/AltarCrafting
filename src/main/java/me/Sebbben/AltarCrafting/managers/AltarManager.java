@@ -1,23 +1,23 @@
-package me.Sebbben.AltarCrafting;
+package me.Sebbben.AltarCrafting.managers;
 
-import com.google.gson.JsonArray;
+import me.Sebbben.AltarCrafting.Altar;
+import me.Sebbben.AltarCrafting.AltarFeature;
+import me.Sebbben.AltarCrafting.AltarFeatures.ClickInteractFeature;
+import me.Sebbben.AltarCrafting.Main;
 import me.Sebbben.AltarCrafting.customItems.AltarSelectionTools;
 import me.Sebbben.AltarCrafting.customSaveFiles.AltarConfigurationHandler;
 import me.Sebbben.AltarCrafting.listeners.AltarSelectionListener;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.BoundingBox;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -31,7 +31,12 @@ public class AltarManager {
         this.plugin = Main.getInstance();
         this.selectionListener = new AltarSelectionListener();
         this.plugin.getServer().getPluginManager().registerEvents(this.selectionListener, this.plugin);
+        this.registerAltarFeatures();
         this.loadAltars();
+    }
+
+    private void registerAltarFeatures() {
+        this.registerAltarFeature(new ClickInteractFeature());
     }
 
     public void createAltar(String name) {
@@ -97,8 +102,10 @@ public class AltarManager {
         }
     }
 
-    public void registerAltarFeature(String name, AltarFeature altarFeature) {
-        this.altarFeatures.put(name, altarFeature);
+    public void registerAltarFeature(AltarFeature altarFeature) {
+        this.altarFeatures.put(altarFeature.getName(), altarFeature);
+        Listener listener = (Listener) altarFeature;
+        this.plugin.getServer().getPluginManager().registerEvents(listener, this.plugin);
     }
 
     public Set<String> getAltarFeatureNames() {
