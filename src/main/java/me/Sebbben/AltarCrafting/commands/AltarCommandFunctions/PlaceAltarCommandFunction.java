@@ -1,6 +1,6 @@
 package me.Sebbben.AltarCrafting.commands.AltarCommandFunctions;
 
-import me.Sebbben.AltarCrafting.managers.AltarManager;
+import me.Sebbben.AltarCrafting.managers.AltarBlueprintsManager;
 import me.Sebbben.AltarCrafting.Main;
 import me.Sebbben.AltarCrafting.utils.commandUtils.CommandFunction;
 import org.bukkit.Location;
@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.Set;
 
 public class PlaceAltarCommandFunction extends CommandFunction {
-    private AltarManager altarManager = Main.getInstance().getAltarManager();
+    private AltarBlueprintsManager altarBlueprintsManager = Main.getInstance().getAltarBlueprintsManager();
     @Override
     public List<String> getValidArgs(CommandSender sender, Command command, String label, String[] args) {
         if (args.length <= 1) {
-            Set<String> names = Main.getInstance().getAltarManager().getAltarNames();
+            Set<String> names = Main.getInstance().getAltarBlueprintsManager().getAltarNames();
             List<String> valid = new ArrayList<>(names.size());
             valid.addAll(names);
             return valid;
@@ -57,7 +57,7 @@ public class PlaceAltarCommandFunction extends CommandFunction {
 
         location = last.getLocation().add(0,1,0);
 
-        this.altarManager.placeAltar(location, args[0]);
+        this.altarBlueprintsManager.placeAltar(location, args[0]);
         return true;
     }
 }

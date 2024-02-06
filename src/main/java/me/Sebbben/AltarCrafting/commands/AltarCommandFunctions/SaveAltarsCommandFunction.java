@@ -16,7 +16,7 @@ public class SaveAltarsCommandFunction extends CommandFunction {
 
     @Override
     public boolean execute(CommandSender sender, Command command, String label, String[] args) {
-        Main.getInstance().getAltarManager().saveAltars();
+        Main.getInstance().getAltarBlueprintsManager().saveAltars();
         AltarConfigurationHandler.save();
         return true;
     }

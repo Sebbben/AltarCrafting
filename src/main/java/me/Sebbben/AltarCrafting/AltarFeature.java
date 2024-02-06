@@ -1,11 +1,11 @@
 package me.Sebbben.AltarCrafting;
 
-import me.Sebbben.AltarCrafting.managers.AltarManager;
+import me.Sebbben.AltarCrafting.managers.AltarBlueprintsManager;
 
 public abstract class AltarFeature {
-    AltarManager altarManager;
+    AltarBlueprintsManager altarBlueprintsManager;
     public AltarFeature() {
-        this.altarManager = Main.getInstance().getAltarManager();
+        this.altarBlueprintsManager = Main.getInstance().getAltarBlueprintsManager();
     }
 
     public abstract String getName();

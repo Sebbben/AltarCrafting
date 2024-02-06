@@ -2,13 +2,11 @@ package me.Sebbben.AltarCrafting;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.BoundingBox;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
+import java.util.*;
 
 public class Altar {
     private String name;
@@ -16,6 +14,7 @@ public class Altar {
     private BoundingBox bounds;
     private Location tempCorner;
     private ArrayList<HashMap<String, String>> blocks;
+    private HashMap<Material, LinkedList<Location>> matToLoc;
 
     public Altar(String name) {
         this.name = name;
@@ -44,7 +43,9 @@ public class Altar {
 
     public void updateBlocks() {
         this.blocks = new ArrayList<>();
-        for (int x = 0;x<this.bounds.getWidthX()+1;x++) {
+        this.matToLoc = new HashMap<>();
+
+        for (int x = 0;x<this.bounds.getWidthX()+1;x++) { // TODO: Change to BlockIterator
             for (int y = 0; y < this.bounds.getHeight()+1; y++) {
                 for (int z = 0; z < this.bounds.getWidthZ()+1; z++) {
                     HashMap<String, String> values = new HashMap<>();
@@ -58,10 +59,11 @@ public class Altar {
                     values.put("y", String.valueOf(y));
                     values.put("z", String.valueOf(z));
                     this.blocks.add(values);
+                    this.matToLoc.getOrDefault(blockMat, new LinkedList<>()).add(new Location(null, x,y,z));
                 }
             }
         }
-        Main.getInstance().getLogger().log(Level.WARNING, String.valueOf(this.blocks));
+
     }
 
     /**
@@ -97,8 +99,14 @@ public class Altar {
     }
     public void loadFromCofig(ConfigurationSection config) {
         this.blocks = new ArrayList<>();
+        this.matToLoc = new HashMap<>();
         for (Map<?, ?> block : config.getMapList("blocks")) {
-            this.blocks.add((HashMap<String, String>) block);
+            HashMap<String, String> b = (HashMap<String, String>) block;
+            this.blocks.add(b);
+            this.matToLoc.getOrDefault(Material.matchMaterial(b.get("type")), new LinkedList<>()).add(new Location(null,
+                    Double.parseDouble(b.get("x")),
+                    Double.parseDouble(b.get("y")),
+                    Double.parseDouble(b.get("z"))));
         }
     }
 
@@ -108,5 +116,35 @@ public class Altar {
 
     public ArrayList<HashMap<String, String>> getBlocks() {
         return this.blocks;
+    }
+
+    public boolean hasBlock(Material type) {
+        return this.matToLoc.containsKey(type);
+    }
+
+    private boolean testForCorner(World world, Location firstCorner) {
+        for (HashMap<String, String> block : this.blocks) {
+            Material mat = Material.matchMaterial(block.get("type"));
+            Location offset = new Location(null,
+                    Integer.parseInt(block.get("x")),
+                    Integer.parseInt(block.get("y")),
+                    Integer.parseInt(block.get("z")));
+            if (!world.getBlockAt(firstCorner.add(offset)).getType().equals(mat)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean isComplete(Location location) {
+        World world = location.getWorld();
+        Material type = location.getBlock().getType();
+        for (Location altarBlockOffset : this.matToLoc.get(type)) {
+            Location firstCorner = location.subtract(altarBlockOffset);
+            if (this.testForCorner(world, firstCorner)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

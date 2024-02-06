@@ -1,6 +1,6 @@
 package me.Sebbben.AltarCrafting.commands.AltarCommandFunctions;
 
-import me.Sebbben.AltarCrafting.managers.AltarManager;
+import me.Sebbben.AltarCrafting.managers.AltarBlueprintsManager;
 import me.Sebbben.AltarCrafting.Main;
 import me.Sebbben.AltarCrafting.utils.commandUtils.CommandFunction;
 import org.bukkit.command.Command;
@@ -12,11 +12,11 @@ import java.util.Objects;
 import java.util.Set;
 
 public class RemoveAltarCommandFunction extends CommandFunction {
-    AltarManager altarManager = Main.getInstance().getAltarManager();
+    AltarBlueprintsManager altarBlueprintsManager = Main.getInstance().getAltarBlueprintsManager();
     @Override
     public List<String> getValidArgs(CommandSender sender, Command command, String label, String[] args) {
         if (args.length < 2) {
-            Set<String> names = Main.getInstance().getAltarManager().getAltarNames();
+            Set<String> names = Main.getInstance().getAltarBlueprintsManager().getAltarNames();
             List<String> valid = new ArrayList<>(names.size());
             valid.addAll(names);
             return valid;
@@ -31,7 +31,7 @@ public class RemoveAltarCommandFunction extends CommandFunction {
             return false;
         }
 
-        this.altarManager.removeAltar(args[0]);
+        this.altarBlueprintsManager.removeAltar(args[0]);
         return true;
     }
 }
