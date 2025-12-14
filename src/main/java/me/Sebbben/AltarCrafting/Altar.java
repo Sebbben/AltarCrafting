@@ -1,11 +1,8 @@
 package me.Sebbben.AltarCrafting;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.util.BoundingBox;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -38,14 +35,6 @@ public class Altar {
         return null;
     }
 
-    public void place(Location location) {}
-
-    public void updateBlocks() {
-
-    }
-
-
-
     public void saveToConfig(ConfigurationSection configSection) {
         ConfigurationSection blocksConfigSection = configSection.createSection("blocks");
         configSection.set("blocks", this.blocks);
@@ -73,5 +62,73 @@ public class Altar {
 
     public HashMap<String, ArrayList<int[]>> getBlocks() {
         return this.blocks;
+    }
+
+    public Set<String> getTypes() {
+        return this.blocks.keySet();
+    }
+
+    public boolean isComplete(Location location) {
+        World world = location.getWorld();
+        if (world == null) return false;
+
+        int validDirections = 15;
+        for (String mat : this.blocks.keySet()) {
+            for (int[] coords : this.blocks.get(mat)) {
+
+                if ( // Normal
+                    !world.getBlockAt(
+                        location.getBlockX() + coords[0],
+                        location.getBlockY() + coords[1],
+                        location.getBlockZ() + coords[2]
+                    ).getType().name().equals(mat)
+                ) {
+
+                    validDirections &= 14;
+
+                }
+
+                if ( // Flip X
+                    !world.getBlockAt(
+                            location.getBlockX() - coords[0],
+                            location.getBlockY() + coords[1],
+                            location.getBlockZ() + coords[2]
+                    ).getType().name().equals(mat)
+                ) {
+
+                    validDirections &= 13;
+
+                }
+
+                if ( // Flip Y
+                    !world.getBlockAt(
+                            location.getBlockX() + coords[0],
+                            location.getBlockY() - coords[1],
+                            location.getBlockZ() + coords[2]
+                    ).getType().name().equals(mat)
+                ) {
+
+                    validDirections &= 11;
+
+                }
+
+                if ( // Flip XY
+                        !world.getBlockAt(
+                                location.getBlockX() - coords[0],
+                                location.getBlockY() - coords[1],
+                                location.getBlockZ() + coords[2]
+                        ).getType().name().equals(mat)
+                ) {
+
+                    validDirections &= 7;
+
+                }
+                Main.getInstance().getLogger().log(Level.WARNING, String.valueOf(validDirections));
+
+                if (validDirections == 0) return false;
+            }
+        }
+
+        return true;
     }
 }

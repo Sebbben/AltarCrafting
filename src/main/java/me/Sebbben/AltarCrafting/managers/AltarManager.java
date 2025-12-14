@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -21,17 +22,17 @@ public class AltarManager {
         this.altars = new HashMap<>();
     }
 
-//    public boolean tryActivateAltar(Location location) {
-//        if (location.getWorld() == null) return false;
-//        World world = location.getWorld();
-//        Block block = world.getBlockAt(location);
-//        List<Altar> altarBlueprints = this.altarBlueprintsManager.getAltarsWithBlock(block.getType().name());
-//        for (Altar altarBlueprint : altarBlueprints) {
-//            if (altarBlueprint.isComplete(location)) {
-//                plugin.getLogger().log(Level.WARNING, "found altar: " + altarBlueprint.getName());
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    public boolean tryActivateAltar(Location location) {
+        if (location.getWorld() == null) return false;
+        World world = location.getWorld();
+        Block block = world.getBlockAt(location);
+        HashSet<Altar> altarBlueprints = this.altarBlueprintsManager.getAltarsByBlockType(block.getType());
+        for (Altar altarBlueprint : altarBlueprints) {
+            if (altarBlueprint.isComplete(location)) {
+                plugin.getLogger().log(Level.WARNING, "found altar: " + altarBlueprint.getName());
+                return true;
+            }
+        }
+        return false;
+    }
 }

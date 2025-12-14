@@ -34,7 +34,7 @@ public class CreateAltarCommandFunction extends CommandFunction {
         }
 
         String altarName = args[0];
-        AltarCreationManager manager = this.altarBlueprintsManager.createAltar(altarName, (Player) sender);
+        AltarCreationManager manager = this.altarBlueprintsManager.startAltarCreation(altarName, (Player) sender);
         if (manager == null) {
             sender.sendMessage("There is already an alter with this name");
             return true;

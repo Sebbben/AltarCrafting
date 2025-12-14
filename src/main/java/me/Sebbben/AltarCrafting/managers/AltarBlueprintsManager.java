@@ -1,11 +1,9 @@
 package me.Sebbben.AltarCrafting.managers;
 
-import it.unimi.dsi.fastutil.Hash;
 import me.Sebbben.AltarCrafting.Altar;
 import me.Sebbben.AltarCrafting.AltarFeature;
 import me.Sebbben.AltarCrafting.AltarFeatures.ClickInteractFeature;
 import me.Sebbben.AltarCrafting.Main;
-import me.Sebbben.AltarCrafting.customItems.AltarSelectionTools;
 import me.Sebbben.AltarCrafting.customSaveFiles.AltarConfigurationHandler;
 import me.Sebbben.AltarCrafting.listeners.AltarSelectionListener;
 import org.bukkit.Location;
@@ -15,14 +13,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.util.BoundingBox;
 
 import java.util.*;
 import java.util.logging.Level;
 
 public class AltarBlueprintsManager {
     private final HashMap<String, Altar> altars = new HashMap<>();
+    private final HashMap<String, HashSet<Altar>> altarByTypeLookup = new HashMap<>();
     private final Main plugin;
     private final HashMap<String, AltarFeature> altarFeatures = new HashMap<>();
     private final HashMap<UUID, AltarCreationManager> creationProcesses = new HashMap<>();
@@ -34,11 +31,24 @@ public class AltarBlueprintsManager {
         this.loadAltars();
     }
 
+    public void registerAltar(Altar altar) {
+        this.altars.put(altar.getName(), altar);
+
+        for (String mat : altar.getTypes()) {
+            if (!this.altarByTypeLookup.containsKey(mat)) {
+                this.altarByTypeLookup.put(mat, new HashSet<>());
+            }
+
+            this.altarByTypeLookup.get(mat).add(altar);
+        }
+    }
+
+
     private void registerAltarFeatures() {
         this.registerAltarFeature(new ClickInteractFeature());
     }
 
-    public AltarCreationManager createAltar(String name, Player creator) {
+    public AltarCreationManager startAltarCreation(String name, Player creator) {
         if (this.altars.containsKey(name)) {
             return null;
         }
@@ -55,7 +65,10 @@ public class AltarBlueprintsManager {
         }
     }
     public void removeAltar(String name) {
-        this.altars.remove(name);
+        Altar altar = this.altars.remove(name);
+        for (HashSet<Altar> matLookup : this.altarByTypeLookup.values()) {
+            matLookup.remove(altar);
+        }
     }
     public void saveAltars() {
         YamlConfiguration altarConfig = AltarConfigurationHandler.get();
@@ -76,7 +89,7 @@ public class AltarBlueprintsManager {
             Altar altar = new Altar(name);
             try {
                 altar.loadFromCofig(config.getConfigurationSection(name));
-                this.altars.put(name, altar);
+                this.registerAltar(altar);
             } catch (ClassCastException ex) {
                 this.plugin.getLogger().log(Level.WARNING, "Could not load altar " + name);
                 this.plugin.getLogger().log(Level.WARNING, ex.toString());
@@ -137,7 +150,7 @@ public class AltarBlueprintsManager {
 
         if (manager.isProcessComplete()) {
             Altar altar = manager.buildAltar();
-            this.altars.put(altar.getName(), altar);
+            this.registerAltar(altar);
             manager.restoreInventory(player);
             player.sendMessage(altar.getName() + " has been created!");
         } else {
@@ -151,5 +164,9 @@ public class AltarBlueprintsManager {
         AltarCreationManager manager = this.creationProcesses.get(player.getUniqueId());
         manager.restoreInventory(player);
         this.creationProcesses.remove(player.getUniqueId());
+    }
+
+    public HashSet<Altar> getAltarsByBlockType(Material type) {
+        return this.altarByTypeLookup.getOrDefault(type.name(), new HashSet<>());
     }
 }
