@@ -21,18 +21,17 @@ public class AltarManager {
         this.altars = new HashMap<>();
     }
 
-    public boolean tryActivateAltar(Location location) {
-        if (location.getWorld() == null) return false;
-        World world = location.getWorld();
-        Block block = world.getBlockAt(location);
-        List<Altar> altarBlueprints = this.altarBlueprintsManager.getAltarsWithBlock(block.getType());
-        for (Altar altarBlueprint : altarBlueprints) {
-            this.plugin.getLogger().log(Level.WARNING, altarBlueprint.getName());
-            if (altarBlueprint.isComplete(location)) {
-                plugin.getLogger().log(Level.WARNING, "found altar: " + altarBlueprint.getName());
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean tryActivateAltar(Location location) {
+//        if (location.getWorld() == null) return false;
+//        World world = location.getWorld();
+//        Block block = world.getBlockAt(location);
+//        List<Altar> altarBlueprints = this.altarBlueprintsManager.getAltarsWithBlock(block.getType().name());
+//        for (Altar altarBlueprint : altarBlueprints) {
+//            if (altarBlueprint.isComplete(location)) {
+//                plugin.getLogger().log(Level.WARNING, "found altar: " + altarBlueprint.getName());
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }

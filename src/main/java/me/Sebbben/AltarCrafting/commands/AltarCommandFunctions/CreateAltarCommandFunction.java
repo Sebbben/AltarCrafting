@@ -2,6 +2,7 @@ package me.Sebbben.AltarCrafting.commands.AltarCommandFunctions;
 
 import me.Sebbben.AltarCrafting.managers.AltarBlueprintsManager;
 import me.Sebbben.AltarCrafting.Main;
+import me.Sebbben.AltarCrafting.managers.AltarCreationManager;
 import me.Sebbben.AltarCrafting.utils.commandUtils.CommandFunction;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -27,15 +28,20 @@ public class CreateAltarCommandFunction extends CommandFunction {
         if (args.length < 1) {
             sender.sendMessage("You must provide a name for the new Altar!");
             return false;
-        }
-        String altarName = args[0];
-        this.altarBlueprintsManager.createAltar(altarName);
-        sender.sendMessage(args);
-        if (args.length == 2) {
-            boolean useTools = args[1].equals("tools");
-            this.altarBlueprintsManager.startSelectionProcess(altarName, (Player) sender, useTools);
+        } else if (args.length < 2) {
+            sender.sendMessage("You must choose weather or not to use tools for defining multiblock");
+            return false;
         }
 
+        String altarName = args[0];
+        AltarCreationManager manager = this.altarBlueprintsManager.createAltar(altarName, (Player) sender);
+        if (manager == null) {
+            sender.sendMessage("There is already an alter with this name");
+            return true;
+        }
+        if (args[1].equals("tools")) {
+            manager.provideTools((Player) sender);
+        }
         return true;
     }
 

@@ -1,5 +1,6 @@
 package me.Sebbben.AltarCrafting.managers;
 
+import it.unimi.dsi.fastutil.Hash;
 import me.Sebbben.AltarCrafting.Altar;
 import me.Sebbben.AltarCrafting.AltarFeature;
 import me.Sebbben.AltarCrafting.AltarFeatures.ClickInteractFeature;
@@ -17,22 +18,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.BoundingBox;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 
 public class AltarBlueprintsManager {
     private final HashMap<String, Altar> altars = new HashMap<>();
-    private final AltarSelectionListener selectionListener;
     private final Main plugin;
     private final HashMap<String, AltarFeature> altarFeatures = new HashMap<>();
+    private final HashMap<UUID, AltarCreationManager> creationProcesses = new HashMap<>();
 
     public AltarBlueprintsManager() {
         this.plugin = Main.getInstance();
-        this.selectionListener = new AltarSelectionListener();
-        this.plugin.getServer().getPluginManager().registerEvents(this.selectionListener, this.plugin);
+        this.plugin.getServer().getPluginManager().registerEvents(new AltarSelectionListener(this), this.plugin);
         this.registerAltarFeatures();
         this.loadAltars();
     }
@@ -41,10 +38,14 @@ public class AltarBlueprintsManager {
         this.registerAltarFeature(new ClickInteractFeature());
     }
 
-    public void createAltar(String name) {
-        altars.put(name, new Altar(name));
+    public AltarCreationManager createAltar(String name, Player creator) {
+        if (this.altars.containsKey(name)) {
+            return null;
+        }
+
+        this.creationProcesses.put(creator.getUniqueId(), new AltarCreationManager(name, creator));
+        return this.creationProcesses.get(creator.getUniqueId());
     }
-    public void setAltarStructure(String name, BoundingBox bounds) {}
     public void addAltarFeature(String name, AltarFeature feature) {}
     public void removeAltarFeature(String name, AltarFeature feature) {}
     public void renameAltar(String oldName, String newName) {
@@ -72,36 +73,20 @@ public class AltarBlueprintsManager {
     public void loadAltars() {
         YamlConfiguration config = AltarConfigurationHandler.get();
         for (String name : config.getKeys(false)) {
-            this.createAltar(name);
+            Altar altar = new Altar(name);
             try {
-                this.altars.get(name).loadFromCofig(config.getConfigurationSection(name));
+                altar.loadFromCofig(config.getConfigurationSection(name));
+                this.altars.put(name, altar);
             } catch (ClassCastException ex) {
                 this.plugin.getLogger().log(Level.WARNING, "Could not load altar " + name);
+                this.plugin.getLogger().log(Level.WARNING, ex.toString());
             }
+
         }
     }
 
     public Set<String> getAltarNames() {
         return this.altars.keySet();
-    }
-    public void startSelectionProcess(String altarName, Player player, boolean useTools) {
-        if (useTools) {
-            if (!this.selectionListener.isActivePlayer(player)) {
-                this.selectionListener.addActivePlayer(player, this.altars.get(altarName));
-                Inventory inv = player.getInventory();
-
-                for (int i=0;i<9;i++) {
-                    inv.setItem(i, null);
-                }
-
-                inv.setItem(2, AltarSelectionTools.getCancelItem());
-                inv.setItem(4, AltarSelectionTools.getCornerSelectTool());
-                inv.setItem(6, AltarSelectionTools.getFinishItem());
-
-            }
-        } else {
-            // TODO: Implement a command based system for selecting corners of altar
-        }
     }
 
     public void registerAltarFeature(AltarFeature altarFeature) {
@@ -122,26 +107,49 @@ public class AltarBlueprintsManager {
         World world = location.getWorld();
         Altar altar = this.altars.get(altarName);
 
-        for (HashMap<String,String> block : altar.getBlocks()) {
-            Location worldLoc = new Location(
-                    world,
-                    location.getBlockX()+Integer.parseInt(block.get("x")),
-                    location.getBlockY()+Integer.parseInt(block.get("y")),
-                    location.getBlockZ()+Integer.parseInt(block.get("z"))
+        HashMap<String, ArrayList<int[]>> blocks = altar.getBlocks();
+        
+        for (String type : blocks.keySet()) {
+            for (int[] coords : blocks.get(type)) {
+                Location worldLoc = new Location(
+                        world,
+                        location.getBlockX()+coords[0],
+                        location.getBlockY()+coords[1],
+                        location.getBlockZ()+coords[2]
+                );
+                Material mat = Material.matchMaterial(type);
+                world.getBlockAt(worldLoc).setType(mat);
+            }
 
-            );
-            Material mat = Material.matchMaterial(block.get("type"));
-            world.getBlockAt(worldLoc).setType(mat);
         }
     }
 
-    public List<Altar> getAltarsWithBlock(Material type) {
-        LinkedList<Altar> altarsWithBlock = new LinkedList<>();
-        for (Altar altar : this.altars.values()) {
-            if (altar.hasBlock(type))
-                altarsWithBlock.add(altar);
+    public AltarCreationManager getAltarCreationManager(Player player) {
+        return this.creationProcesses.get(player.getUniqueId());
+    }
+
+    public void finishAltar(Player player) {
+        if (!this.creationProcesses.containsKey(player.getUniqueId())) {
+            return;
         }
 
-        return altarsWithBlock;
+        AltarCreationManager manager = this.creationProcesses.get(player.getUniqueId());
+
+        if (manager.isProcessComplete()) {
+            Altar altar = manager.buildAltar();
+            this.altars.put(altar.getName(), altar);
+            manager.restoreInventory(player);
+            player.sendMessage(altar.getName() + " has been created!");
+        } else {
+            player.sendMessage("Creation process is not complete");
+        }
+
+
+    }
+
+    public void cancelCreation(Player player) {
+        AltarCreationManager manager = this.creationProcesses.get(player.getUniqueId());
+        manager.restoreInventory(player);
+        this.creationProcesses.remove(player.getUniqueId());
     }
 }

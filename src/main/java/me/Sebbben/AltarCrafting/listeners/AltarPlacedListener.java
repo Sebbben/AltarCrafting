@@ -16,12 +16,12 @@ public class AltarPlacedListener implements Listener {
     @EventHandler
     public void onBlockPlaced(BlockPlaceEvent event) {
 
-        boolean success = this.altarManager.tryActivateAltar(event.getBlock().getLocation());
+//        boolean success = this.altarManager.tryActivateAltar(event.getBlock().getLocation());
 
-        if (success) {
-            event.getPlayer().sendMessage("Altar placed");
-        } else {
-            event.getPlayer().sendMessage("No altar");
-        }
+//        if (success) {
+//            event.getPlayer().sendMessage("Altar placed");
+//        } else {
+//            event.getPlayer().sendMessage("No altar");
+//        }
     }
 }
