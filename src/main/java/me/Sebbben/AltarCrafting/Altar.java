@@ -69,66 +69,52 @@ public class Altar {
     }
 
     public boolean isComplete(Location location) {
+
         World world = location.getWorld();
         if (world == null) return false;
 
-        int validDirections = 15;
-        for (String mat : this.blocks.keySet()) {
-            for (int[] coords : this.blocks.get(mat)) {
+        for (int[] assumedOffset : this.blocks.get(location.getBlock().getType().name())) {
+            int validRotations = 15;
+            for (String mat : this.blocks.keySet()) {
+                for (int[] offset : this.blocks.get(mat)) {
+                    int[] rel_offset = new int[]{offset[0]-assumedOffset[0], offset[1]-assumedOffset[1], offset[2]-assumedOffset[2]};
 
-                if ( // Normal
-                    !world.getBlockAt(
-                        location.getBlockX() + coords[0],
-                        location.getBlockY() + coords[1],
-                        location.getBlockZ() + coords[2]
-                    ).getType().name().equals(mat)
-                ) {
+                    // No rotation
+                    if ((validRotations&1) == 1 && !world.getBlockAt(
+                            location.getBlockX() + rel_offset[0],
+                            location.getBlockY() + rel_offset[1],
+                            location.getBlockZ() + rel_offset[2]).getType().name().equals(mat)) {
+                        validRotations &= 14;
+                    }
+                    // 90 deg rotation, x => z z => -x
+                    if ((validRotations&2) == 2 && !world.getBlockAt(
+                            location.getBlockX() + rel_offset[2],
+                            location.getBlockY() + rel_offset[1],
+                            location.getBlockZ() - rel_offset[0]).getType().name().equals(mat)) {
+                        validRotations &= 13;
+                    }
+                    // 180 deg rotation, x <=> -x, z <=> -z
+                    if ((validRotations&4) == 4 && !world.getBlockAt(
+                            location.getBlockX() - rel_offset[0],
+                            location.getBlockY() + rel_offset[1],
+                            location.getBlockZ() - rel_offset[2]).getType().name().equals(mat)) {
+                        validRotations &= 11;
+                    }
+                    // 270 deg rotation, x => -z z => x
+                    if ((validRotations&8) == 8 && !world.getBlockAt(
+                            location.getBlockX() - rel_offset[2],
+                            location.getBlockY() + rel_offset[1],
+                            location.getBlockZ() + rel_offset[0]).getType().name().equals(mat)) {
+                        validRotations &= 7;
+                    }
 
-                    validDirections &= 14;
-
+                    if (validRotations == 0) break;
                 }
-
-                if ( // Flip X
-                    !world.getBlockAt(
-                            location.getBlockX() - coords[0],
-                            location.getBlockY() + coords[1],
-                            location.getBlockZ() + coords[2]
-                    ).getType().name().equals(mat)
-                ) {
-
-                    validDirections &= 13;
-
-                }
-
-                if ( // Flip Y
-                    !world.getBlockAt(
-                            location.getBlockX() + coords[0],
-                            location.getBlockY() - coords[1],
-                            location.getBlockZ() + coords[2]
-                    ).getType().name().equals(mat)
-                ) {
-
-                    validDirections &= 11;
-
-                }
-
-                if ( // Flip XY
-                        !world.getBlockAt(
-                                location.getBlockX() - coords[0],
-                                location.getBlockY() - coords[1],
-                                location.getBlockZ() + coords[2]
-                        ).getType().name().equals(mat)
-                ) {
-
-                    validDirections &= 7;
-
-                }
-                Main.getInstance().getLogger().log(Level.WARNING, String.valueOf(validDirections));
-
-                if (validDirections == 0) return false;
+                if (validRotations == 0) break;
             }
+            if (validRotations != 0) return true;
         }
-
-        return true;
+        return false;
     }
+
 }
