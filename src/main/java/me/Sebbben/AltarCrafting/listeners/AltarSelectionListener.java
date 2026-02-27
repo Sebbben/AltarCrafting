@@ -25,8 +25,8 @@ public class AltarSelectionListener implements Listener {
 
         ItemStack mainHand = e.getPlayer().getInventory().getItemInMainHand();
         // ----- RIGHT CLICK BLOCK -------
-        if  (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (mainHand.isSimilar(AltarSelectionTools.getCornerSelectTool())) {
+        if  (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
+            if (e.getAction() == Action.RIGHT_CLICK_BLOCK && mainHand.isSimilar(AltarSelectionTools.getCornerSelectTool())) {
                 selectCorner(e);
             } else if (mainHand.isSimilar(AltarSelectionTools.getFinishItem())) {
                 this.blueprintsManager.finishAltar(e.getPlayer());

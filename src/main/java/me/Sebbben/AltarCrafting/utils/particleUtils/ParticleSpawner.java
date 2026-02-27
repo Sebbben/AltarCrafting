@@ -1,6 +1,5 @@
 package me.Sebbben.AltarCrafting.utils.particleUtils;
 
-import com.destroystokyo.paper.ParticleBuilder;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -69,7 +68,6 @@ public class ParticleSpawner {
 
 
     public void spawnParticleLine(Location l1, Location l2) {
-        ParticleBuilder pb = new ParticleBuilder(Particle.VILLAGER_HAPPY);
         double xDiff = l2.getX() - l1.getX();
         double yDiff = l2.getY() - l1.getY();
         double zDiff = l2.getZ() - l1.getZ();
@@ -83,8 +81,7 @@ public class ParticleSpawner {
 
         for (int i=0;i<numberOfParticles;i++) {
             Location pLoc = l1.clone().add(xInterval*i, yInterval*i, zInterval*i);
-            pb.location(pLoc);
-            pb.spawn();
+            pLoc.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, pLoc, 1);
         }
 
     }
